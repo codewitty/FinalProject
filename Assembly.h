@@ -6,25 +6,38 @@ using namespace std;
 enum assemblyAttribute {
 	NONE,
 	NAME,
+	TYPE,
 	NUM_CONTIGS,
-	N50
+	SIZE,
+	N50,
+	GC,
+	UNKNOWN
 };
 
 class Assembly {
 protected:
-	string name;
-	string type;
-	int num_contigs;
-	int size;
-	int n50;
-	float gc;
-	float unknown;
-	void *pkey;
+	string            name;
+	string            type;
+	int               num_contigs;
+	int               size;
+	int               n50;
+	double            gc;
+	double            unknown;
+	void             *pkey;
+	assemblyAttribute keyType;
 
 public:
+	// sparse constructor
 	Assembly();
-	Assembly(int whole, int frac);
+	// complete constructor
+	Assembly(string name, string type,
+			 int coontigs, int size, int n50,
+			 double gc, double unknown,
+		     assemblyAttribute opKeyType);
+
 	virtual ~Assembly() {};
+
+	void setOrdering(assemblyAttribute anOrder);
 
 	//**********************************************************************//
 	// Person operator >                                                    //

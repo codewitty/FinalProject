@@ -154,55 +154,25 @@ int main()
 		<< endl << endl;
 
 	// Working Variables for Menu Processing
-	string path;
-	string outPath;
-	string input;
-	string name;
-	string bday;
-	string nameOutPath;
-	string bdayOutPath;
 	int choice = 0;
 	bool loop = true;
 	fstream inFile;
 	int number_of_lines = 0;
 	int count = 0;
-	int objectCount = 0;
 
-	// Ask user for file paths for input and output files
-	cout << "   Please enter the full path of the input file\n" << "   ";
-	getline(cin, path);
-
-	cout << "   Please enter the full path where you would like to store the Output Files\n" << "   ";
-	getline(cin, outPath);
-
-	// Append required file names to user defined output path
-	nameOutPath = outPath + "/namesOutput.txt";
-	bdayOutPath = outPath + "/birthdaysOutput.txt";
-
-	// Open output files
-	namefh.open(nameOutPath);
-	bdayfh.open(bdayOutPath);
-
-	inFile.open(path, ios::in);
+	inFile.open("faux_assemblies.csv", ios::in);
 
 	// This if block creates Person objects and seeds them into the array.
 	if (inFile) {
-		DeleteEmptyLines(path);
-		// Check number of lines
 		while (getline(inFile, name)) {
 			++number_of_lines;
-		}
-		if (number_of_lines % 2 != 0) {
-			cout << "Error!!! Input file invalid!!!" << endl;
-			return 0;
 		}
 
 		inFile.clear();
 		inFile.seekg(0, ios::beg);
 
-		objectCount = number_of_lines / 2;
 
-		while (!inFile.eof() && count < objectCount) {
+		while (!inFile.eof() && count < number_of_lines) {
 			// Get the name and birthday...
 			getline(inFile, name);
 			getline(inFile, bday);
