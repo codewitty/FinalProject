@@ -37,7 +37,29 @@ public:
 
 	virtual ~Assembly() {};
 
+	// record primary key is set with this
+	//  (mutator)
 	void setOrdering(assemblyAttribute anOrder);
+
+	// accessors
+	string getName() const;
+	string getType() const;
+	int    getNumContigs() const;
+	int    getSize() const;
+	int    getN50() const;
+	double getGc() const;
+	double getUnknown();
+	void * getPkey() const;
+	assemblyAttribute getKeyType() const;
+
+	// Mutators
+	void setName(string aGNomeAssemblyName);
+	void setType(string aGNomeAssemblyType);
+	void setNumContigs(int numContigs);
+	void setSize(int aGNomeAssemblySize);
+	void setN50(int aGNomeAssemblyN50);
+	void setGc(float aGNomeAssemblyGc);
+	void setUnknown(float aGNomeAssemblyUnknown);
 
 	//**********************************************************************//
 	// Person operator >                                                    //
@@ -64,7 +86,4 @@ public:
 	// return: result of assign one operand the result of an RHS expression.//
 	//**********************************************************************//
 	virtual Assembly& operator=(const Assembly &);  // overloaded =
-
-	friend std::ostream& operator << (std::ostream &out, Assembly &right);
-	// friend std::istream& operator>>(std::istream& in, Assembly& right);
 };

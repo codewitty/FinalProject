@@ -5,7 +5,7 @@ Assembly::Assembly()
 {
 	name        = "";       // Assembly Name           (string)
 	type        = "";       // Assembly Method         (string)
-	num_contigs = 0;        // Number Configs          (int)
+	num_contigs = 0;        // Number Contigs          (int)
 	size        = 0;        // Size (bases)            (int)
 	n50         = 0;        // n50 (kbp)               (int)
 	gc          = 0.0;      // float (GC content)      (float)
@@ -81,6 +81,86 @@ void Assembly::setOrdering(assemblyAttribute anOrder)
 	default: // code to be executed if n doesn't match any cases
 		cout << "Assembly::setOrdering() : Operator (>) cant happen, keytype is BOGUS!" << endl;
 	}
+}
+
+string Assembly::getName() const
+{
+	return this->name;
+}
+
+string Assembly::getType() const
+{
+	return this->type;
+}
+
+int Assembly::getNumContigs() const
+{
+	return this->num_contigs;
+}
+
+int Assembly::getSize() const
+{
+	return this->size;
+}
+
+int Assembly::getN50() const
+{
+	return this->n50;
+}
+
+double Assembly::getGc() const
+{
+	return this->gc;
+}
+
+double Assembly::getUnknown()
+{
+	return this->unknown;
+}
+
+void * Assembly::getPkey() const
+{
+	return this->pkey;
+}
+
+assemblyAttribute Assembly::getKeyType() const
+{
+	return this->keyType;
+}
+
+void Assembly::setName(string aGNomeAssemblyName)
+{
+	this->name = aGNomeAssemblyName;
+}
+
+void Assembly::setType(string aGNomeAssemblyType)
+{
+	this->type = aGNomeAssemblyType;
+}
+
+void Assembly::setNumContigs(int numContigs)
+{
+	this->num_contigs = numContigs;
+}
+
+void Assembly::setSize(int aGNomeAssemblySize)
+{
+	this->size = aGNomeAssemblySize;
+}
+
+void Assembly::setN50(int aGNomeAssemblyN50)
+{
+	this->n50 = aGNomeAssemblyN50;
+}
+
+void Assembly::setGc(float aGNomeAssemblyGc)
+{
+	this->gc = aGNomeAssemblyGc;
+}
+
+void Assembly::setUnknown(float aGNomeAssemblyUnknown)
+{
+	this->unknown = aGNomeAssemblyUnknown;
 }
 
 bool Assembly::operator>(const Assembly &right)
