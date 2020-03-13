@@ -83,6 +83,50 @@ void Assembly::setOrdering(assemblyAttribute anOrder)
 	}
 }
 
+bool Assembly::operator<(const Assembly &right)
+{
+	// These are the Assembly member types we are processing.
+	// NONE,        (==> unassigned)
+	// NAME,		(string)
+	// TYPE,        (string)
+	// NUM_CONTIGS, (int)
+	// SIZE,        (int)
+	// N50,         (int)
+	// GC,          (float)
+	// UNKNOWN      (float)
+
+	bool retval = false;
+	switch (this->keyType)
+	{
+	case NONE:
+		cout << "\nAssembly::operator>() : Operator (<) cant happen, keytype is 'NONE'" << endl;
+		retval = false;
+		break;	
+	case NAME:        // NAME and TYPE are strings
+	case TYPE:
+		if (*(static_cast<string *>(pkey)) < *(static_cast<string *>(right.pkey)))
+			retval = true;
+		break;
+	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
+	case SIZE:
+	case N50:
+		if (*(static_cast<int *>(pkey)) < *(static_cast<int *>(right.pkey)))
+			retval = true;
+		break;
+	case GC:          // GC, UNKNOWN are float
+	case UNKNOWN:
+		if (*(static_cast<float *>(pkey)) < *(static_cast<double *>(right.pkey)))
+			retval = true;
+		break;
+	default: // code to be executed if n doesn't match any cases
+		cout << "Assembly::operator>() : Operator (<) cant happen, keytype is BOGUS!" << endl;
+		retval = false;
+
+	}
+
+	return retval;
+}
+
 bool Assembly::operator>(const Assembly &right)
 {
 	// These are the Assembly member types we are processing.
@@ -182,6 +226,7 @@ Assembly & Assembly::operator=(const Assembly &right)
 		this->gc          = right.gc;
 		this->unknown     = right.unknown;
 		this->pkey        = right.pkey;
+		this->keyType	  = right.keyType;
 	}
 	return *this;
 }

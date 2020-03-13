@@ -508,7 +508,9 @@ inline void LinkedList<T>::print()
 		cout << "Underflow : Empty List...\n";
 	}
 	while (index != nullptr) {
-		cout << "Item [" << index->getItem() << "]\n";
+		T anItem;
+		anItem = index ->getItem();
+		cout << "Item [" << anItem << "]\n";
 		index = index->getNext();
 	}
 	cout << "\nTotal Item Count : " << itemCount << "\n";

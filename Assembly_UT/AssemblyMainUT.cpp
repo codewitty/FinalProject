@@ -29,6 +29,12 @@ int main()
 		cout << "Our (>) operator for assembly works." << endl;
 	}
 
+	if (AssemblyByName01 < AssemblyByName05) {
+		cout << "Assembly [" << AssemblyByName01 << "] is lesser than " << endl;
+		cout << "assembly [" << AssemblyByName05 << "] (by NAME)." << endl;
+		cout << "Our (<) operator for assembly works." << endl;
+	}
+
 	if (AssemblyByName15 == AssemblyByName15) {
 		cout << "Assembly [" << AssemblyByName15 << "] and " << endl;
 		cout << "assembly [" << AssemblyByName15 << "] are equal (by NAME)." << endl;

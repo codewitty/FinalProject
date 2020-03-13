@@ -31,13 +31,20 @@ public:
 	Assembly();
 	// complete constructor
 	Assembly(string name, string type,
-			 int coontigs, int size, int n50,
+			 int contigs, int size, int n50,
 			 double gc, double unknown,
 		     assemblyAttribute opKeyType);
 
 	virtual ~Assembly() {};
 
 	void setOrdering(assemblyAttribute anOrder);
+
+	//**********************************************************************//
+	// Person operator <                                                    //
+	// pre:  Person objects we want to compare.                             //
+	// return: result of comparing the operands (>)                         //
+	//**********************************************************************//
+	virtual bool operator < (const Assembly &);		// Overloaded >
 
 	//**********************************************************************//
 	// Person operator >                                                    //
