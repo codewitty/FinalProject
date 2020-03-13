@@ -84,7 +84,7 @@ public:
 	// pre:  Person objects we want to compare.                             //
 	// return: result of comparing the operands (==)                        //
 	//**********************************************************************//
-	bool operator == (const Assembly &);		// Overloaded >
+	bool operator == (const Assembly &) const;		// Overloaded >
 
 	//**********************************************************************//
 	// Person operator =                                                    //
