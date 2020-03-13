@@ -31,9 +31,9 @@ public:
 	Assembly();
 	// complete constructor
 	Assembly(string name, string type,
-			 int contigs, int size, int n50,
-			 double gc, double unknown,
-		     assemblyAttribute opKeyType);
+		int contigs, int size, int n50,
+		double gc, double unknown,
+		assemblyAttribute opKeyType);
 
 	virtual ~Assembly() {};
 
@@ -84,7 +84,7 @@ public:
 	// pre:  Person objects we want to compare.                             //
 	// return: result of comparing the operands (==)                        //
 	//**********************************************************************//
-	bool operator == (const Assembly &) const;		// Overloaded ==
+	bool operator == (const Assembly &);		// Overloaded >
 
 	//**********************************************************************//
 	// Person operator =                                                    //

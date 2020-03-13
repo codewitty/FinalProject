@@ -3,27 +3,27 @@
 
 Assembly::Assembly()
 {
-	name        = "";       // Assembly Name           (string)
-	type        = "";       // Assembly Method         (string)
+	name = "";       // Assembly Name           (string)
+	type = "";       // Assembly Method         (string)
 	num_contigs = 0;        // Number Contigs          (int)
-	size        = 0;        // Size (bases)            (int)
-	n50         = 0;        // n50 (kbp)               (int)
-	gc          = 0.0;      // float (GC content)      (float)
-	unknown     = 0.0;      // float (Percent Unknown) (float)
-	pkey        = nullptr;  // void *
-	keyType     = NONE;     // NONE for now...
+	size = 0;        // Size (bases)            (int)
+	n50 = 0;        // n50 (kbp)               (int)
+	gc = 0.0;      // float (GC content)      (float)
+	unknown = 0.0;      // float (Percent Unknown) (float)
+	pkey = nullptr;  // void *
+	keyType = NONE;     // NONE for now...
 }
 
 Assembly::Assembly(string aName, string aType, int aNumContigs, int aSize, int anN50, double aGc, double anUnknown, assemblyAttribute anOpKeyType)
 {
-	name        = aName;
-	type        = aType;
+	name = aName;
+	type = aType;
 	num_contigs = aNumContigs;
-	size        = aSize;
-	n50         = anN50;
-	gc          = aGc;
-	unknown     = anUnknown;
-	keyType     = anOpKeyType;
+	size = aSize;
+	n50 = anN50;
+	gc = aGc;
+	unknown = anUnknown;
+	keyType = anOpKeyType;
 	setOrdering(keyType);
 }
 
@@ -182,7 +182,7 @@ bool Assembly::operator<(const Assembly &right)
 	case NONE:
 		cout << "\nAssembly::operator>() : Operator (<) cant happen, keytype is 'NONE'" << endl;
 		retval = false;
-		break;	
+		break;
 	case NAME:        // NAME and TYPE are strings
 	case TYPE:
 		if (*(static_cast<string *>(pkey)) < *(static_cast<string *>(right.pkey)))
@@ -226,7 +226,7 @@ bool Assembly::operator>(const Assembly &right)
 	case NONE:
 		cout << "\nAssembly::operator>() : Operator (>) cant happen, keytype is 'NONE'" << endl;
 		retval = false;
-		break;	
+		break;
 	case NAME:        // NAME and TYPE are strings
 	case TYPE:
 		if (*(static_cast<string *>(pkey)) > *(static_cast<string *>(right.pkey)))
@@ -252,7 +252,7 @@ bool Assembly::operator>(const Assembly &right)
 	return retval;
 }
 
-bool Assembly::operator==(const Assembly &right) const
+bool Assembly::operator==(const Assembly &right)
 {
 	// These are the Assembly member types we are processing.
 	// NONE,        (==> unassigned)
@@ -299,22 +299,22 @@ bool Assembly::operator==(const Assembly &right) const
 Assembly & Assembly::operator=(const Assembly &right)
 {
 	if (this != &right) {
-		this->name        = right.name;
-		this->type        = right.type;
+		this->name = right.name;
+		this->type = right.type;
 		this->num_contigs = right.num_contigs;
-		this->size        = right.size;
-		this->n50         = right.n50;
-		this->gc          = right.gc;
-		this->unknown     = right.unknown;
-		this->pkey        = right.pkey;
-		this->keyType	  = right.keyType;
+		this->size = right.size;
+		this->n50 = right.n50;
+		this->gc = right.gc;
+		this->unknown = right.unknown;
+		this->pkey = right.pkey;
+		this->keyType = right.keyType;
 	}
 	return *this;
 }
 
 std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 {
-	strm << obj.name << ", " << obj.type << ", " << obj.num_contigs << ", " 
+	strm << obj.name << ", " << obj.type << ", " << obj.num_contigs << ", "
 		<< obj.size << ", " << obj.n50 << ", " << obj.gc << ", " << obj.unknown;
 	return strm;
 }

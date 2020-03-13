@@ -20,12 +20,12 @@ ERS248804.fasta.gz,Spades,2348,2846495,205,0.3942,0.5904
 pilon.fasta.gz,Spades,914,2677840,88,0.2821,0.6297
 scaffold_idba_pooled_gambiae.fasta.gz,Spades,2825,2876415,237,0.0197,0.0492
 wol_proteins.fasta.gz,velvet,3364,2443968,296,0.2032,0.606
-all_1.fastq.gz         ERS248758_1.fastq.gz,velvet,2439,2848004,199,0.2341,0.3837
-all_2.fastq.gz         ERS248758_2.fastq.gz,velvet,1034,1527453,276,0.5492,0.85
-ERR1554906_2.fastq.gz  ERS248788_1.fastq.gz,velvet,2528,2732067,245,0.6446,0.4895
-ERS1098427_1.fastq.gz  ERS248788_2.fastq.gz,pilon + idba,1545,1840477,304,0.2478,0.2687
-ERS1297723_1.fastq.gz  ERS248804_1.fastq.gz,pilon + idba,357,2479293,183,0.8413,0.4782
-ERS1297723_2.fastq.gz  ERS248804_2.fastq.gz,pilon + idba,3581,2227336,62,0.1975,0.996
+ERS248758_1.fastq.gz,velvet,2439,2848004,199,0.2341,0.3837
+ERS248758_2.fastq.gz,velvet,1034,1527453,276,0.5492,0.85
+ERS248788_1.fastq.gz,velvet,2528,2732067,245,0.6446,0.4895
+ERS248788_2.fastq.gz,pilon + idba,1545,1840477,304,0.2478,0.2687
+ERS248804_1.fastq.gz,pilon + idba,357,2479293,183,0.8413,0.4782
+ERS248804_2.fastq.gz,pilon + idba,3581,2227336,62,0.1975,0.996
 scaffold_reads_sensitive.protein_validated.all.bam,pilon + idba,1686,2000023,104,0.8996,0.5115
 scaffold_reads_sensitive.protein_validated.alligned_to_all.bam,pilon + idba,244,2457440,203,0.3582,0.0613
 scaffold_reads_sensitive.protein_validated.alligned_to_all.sorted.bam,velvet,1721,2045662,95,0.4097,0.5762
@@ -49,53 +49,3 @@ scaffold_contig_lengths,pilon,779,1768119,206,0.7887,0.5742
  scaffold_reads_sensitive.protein_validated.all.fasta,pilon,858,2115755,272,0.3439,0.7339
  scaffold_reads_sensitive.protein_validated.all.summary,pilon,1911,2017107,194,0.6286,0.5393
 wolbachia_draft_002,pilon,2399,2027349,200,0.5725,0.2466
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,

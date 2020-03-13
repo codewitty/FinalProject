@@ -24,6 +24,13 @@ public:
 	//**********************************************************************//
 	T& operator[](int &nIndex);
 
+	//**********************************************************************//
+	// Array operator [] - our Array subscript operator                     //
+	// PRE    : target index array request.                                 //
+	// RETURN : Reference of the Array object we are targeting.             //
+	//**********************************************************************//
+	T& operator[](const int &nIndex);
+
 	// The length of the array is always an integer
 	// It does not depend on the data type of the array
 	int GetLength(); // templated GetLength() function defined below
@@ -70,6 +77,15 @@ void Array<T>::Erase()
 // Subscript overload operator for Array Template
 template<typename T>
 T & Array<T>::operator[](int & nIndex)
+{
+	if (nIndex >= 0 && nIndex < m_nLength)
+		return m_ptData[nIndex];
+	return m_ptData[0];
+}
+
+// Subscript overload operator for Array Template
+template<typename T>
+T & Array<T>::operator[](const int & nIndex)
 {
 	if (nIndex >= 0 && nIndex < m_nLength)
 		return m_ptData[nIndex];
