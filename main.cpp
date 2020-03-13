@@ -3,48 +3,46 @@
 #include <fstream>
 #include <iomanip>
 #include "ArrayTemplateClass.h"
-#include "StdioAndFileStreamer.h"
 #include "HandyUtils.h"
-#include "Person.h"
 #include "BSTNode.h"
 #include "BNTree.h"
+#include "LinkedList.h"
+#include "Node.h"
+#include "Assembly.h"
 
 using namespace std;
 
 // Forward Declarations
-void displayPersonName(Person & anItem);
-void displayPersonBday(Person & anItem);
-void displayPerson(Person & anItem);
+//void displayPersonName(Person & anItem);
+//void displayPersonBday(Person & anItem);
+//void displayPerson(Person & anItem);
+int objectCount = 0;
 
-// our global file handles
-ofstream namefh;  // file handle for the name ordered traversals.
-ofstream bdayfh;  // file handle for the birthday ordered traversals.
+BNTree<Assembly> assemblyTree;
+LinkedList<Assembly> assemblyList;
+Assembly AssemblyByName01("contig-20.fa", "pilon+idba", 2637, 2182179, 306, 0.1573, 0.1964, NAME);
+Assembly AssemblyByName02("contig-30.fa", "Spades", 2130, 1660411, 321, 0.5292, 0.3762, NAME);
+Assembly AssemblyByName03("contig-40.fa", "MosaicFLye", 2309, 2463148, 265, 0.8489, 0.759, NAME);
 
-// our global 'log' and standard out file streamers
-StdioAndFileStreamer nameOut(namefh, std::cout);
-StdioAndFileStreamer bdayOut(bdayfh, std::cout);
-
-BNTree<Person> nameTree;
-BNTree<Person> bdayTree;
 // Covering function for generic add.
-bool addItem(Person* name, Person* bday){
+bool addItem(Assembly * anItem){
 	// 1. Simple validation
 	// 2. Add to all 3 data structures
 
 	// TREE ADD CODE
-	nameTree.add(*name);
-	bdayTree.add(*bday);
+	assemblyTree.add(*anItem);
 	// HASH ADD CODE tbd
 	// Ex. BdayHash.add(*name)
 
 	// MRU LINKED LIST ADD CODE tbd
-
+	assemblyList.insert(*anItem);
 	// 3. Report results
 	return true;
 }
 
-bool searchItem(Person searchItem, orderAttr order) {
+bool searchItem(Assembly searchItem, assemblyAttribute order) {
 	bool retVal{false};
+	/*
 	if (order == NAME) {
 		if (nameTree.contains(searchItem))
 		{
@@ -70,11 +68,13 @@ bool searchItem(Person searchItem, orderAttr order) {
 	// MRU LINKED LIST DELETE CODE tbd
 
 	// 3. Report results
+	*/
+	return retVal;
 }
 
-bool deleteItem(Person person_to_delete, orderAttr order){
-	//
+bool deleteItem(Assembly genome_to_delete, assemblyAttribute order){
 	bool retVal{false};
+	/*
 	if (order == NAME)
 	{
 		if (!nameTree.contains(person_to_delete))
@@ -118,6 +118,7 @@ bool deleteItem(Person person_to_delete, orderAttr order){
 	// MRU LINKED LIST DELETE CODE tbd
 
 	// 3. Report results
+	*/
 	return retVal;
 }
 
@@ -144,12 +145,12 @@ bool deleteItem(Person person_to_delete, orderAttr order){
 int main()
 {
 	const int       MAX_PERSONS = 500;              // Maximum persons in our database
-	Array<Person *> aPersonByName(MAX_PERSONS);		// An array of type 'Person' using Array Template
-	Array<Person *> aPersonByBday(MAX_PERSONS);		// An array of type 'Person' using Array Template
+	//Array<Person *> aPersonByName(MAX_PERSONS);		// An array of type 'Person' using Array Template
+//	Array<Person *> aPersonByBday(MAX_PERSONS);		// An array of type 'Person' using Array Template
 
 	//   Print Header
-	cout << "\n\nLab05\n"
-		<< "Names : Joseph Saunders and Joshua Gomes\n"
+	cout << "\n\nFinal Project\n"
+		<< "Names : Joseph Saunders, Joshua Gomes, Minh Truong and Kavya Aswadhati\n"
 		<< "Class : CIS22C61Y"
 		<< endl << endl;
 
@@ -159,6 +160,7 @@ int main()
 	fstream inFile;
 	int number_of_lines = 0;
 	int count = 0;
+	string name;
 
 	inFile.open("faux_assemblies.csv", ios::in);
 
@@ -173,18 +175,6 @@ int main()
 
 
 		while (!inFile.eof() && count < number_of_lines) {
-			// Get the name and birthday...
-			getline(inFile, name);
-			getline(inFile, bday);
-			// Normalize the name and birthday...
-			string tname = trim(name);
-			string tbday = trim(bday);
-			// Add the person to the name and birthday arrays...
-			aPersonByName[count] = new Person(tname, tbday, NAME);
-			aPersonByBday[count] = new Person(tname, tbday, BDAY);
-			// Add to person to name and birthday BST's
-			nameTree.add(*aPersonByName[count]);
-			bdayTree.add(*aPersonByBday[count]);
 			count++;
 		}
 		inFile.close();
@@ -230,6 +220,15 @@ int main()
 			string new_bday;
 			while (flag) {
 				cout << " Enter the name data item for the new node.\n" << " ";
+/*
+				Assembly * temp1 = AssemblyByName01;
+				Assembly * temp2 = AssemblyByName02;
+				Assembly * temp3 = AssemblyByName03;
+				addItem(temp1);
+				addItem(temp2);
+				addItem(temp3);
+				*/
+				/*
 				getline(cin, new_name);
 				cout << " Enter the birthday data item for the new node. "
 					<< "Format is yyy-mm-dd.\n";
@@ -247,6 +246,7 @@ int main()
 				aPersonByBday[objectCount] = personByBday; 
 				// inc object count...
 				objectCount += 1;
+				*/
 
 				// Set flag using exit function
 				flag = exitFunction();
@@ -263,6 +263,7 @@ int main()
 			while (sflag)
 			{
 				cout << " Enter the name of the person you would like to look for.\n";
+				/*j
 				getline(cin, name);
 				string tname = trim(name);
 				Person search_name(tname, "000-00-00", NAME);
@@ -272,6 +273,7 @@ int main()
 				else
 					cout << "\nData item not found" << endl;
 				// Set flag using exit function
+				*/
 				sflag = exitFunction();
 			}
 			break;
@@ -286,6 +288,7 @@ int main()
 			while (sflag)
 			{
 				cout << " Enter the birthday of the person you would like to look for.\n";
+				/*
 				getline(cin, bday);
 				string tbday = trim(bday);
 				Person search_bday("", tbday, BDAY);
@@ -294,6 +297,7 @@ int main()
 					cout << "\nData item found" << endl;
 				else
 					cout << "\nData item not found" << endl;
+					*/
 				// Set flag using exit function
 				sflag = exitFunction();
 			}
@@ -309,6 +313,7 @@ int main()
 			string r_name;
 
 			// loop allows you to keep deleting items to your hearts content...
+			/*
 			while (removingDataItems) {
 				cout << " Enter the name of the person item to be deleted.\n";
 				cout << " ";
@@ -326,6 +331,7 @@ int main()
 				// Set flag using exit function
 				removingDataItems = exitFunction();
 			}
+			*/
 		break;
 	} // End switch
 
@@ -336,7 +342,7 @@ int main()
 		{
 			bool removingDataItems = true;
 			string r_bday;
-
+/*
 			// loop allows you to keep deleting items to your hearts content...
 			while (removingDataItems) {
 				cout << " Enter the birthday of the person item to be deleted.\n";
@@ -355,6 +361,7 @@ int main()
 				// Set flag using exit function
 				removingDataItems = exitFunction();
 			}
+			*/
 		break;
 		} // End switch case 5
 		//************************************************************//
@@ -364,6 +371,7 @@ int main()
 		//************************************************************//
 		case 6:
 		{
+			/*
 
 			nameOut << endl << "...!!!!...DISPLAYING NAME TREE...!!!!..." << endl;
 			nameOut << endl << endl << "Nametree in PREORDER" << endl;
@@ -387,6 +395,7 @@ int main()
 			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
 			bdayOut << string(80, '=') << endl;
 			bdayTree.breadthfirstTraverse(displayPersonBday);
+			*/
 		}
 		break;
 
@@ -398,6 +407,7 @@ int main()
 		//************************************************************//
 		case 7:
 		{
+			/*
 			nameOut << endl << "...!!!!...DISPLAYING NAME TREE...!!!!..." << endl;
 			nameOut << endl << endl << "Nametree in PREORDER" << endl;
 			nameOut << string(80, '=') << endl;
@@ -423,6 +433,7 @@ int main()
 			cout << endl << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl;
 			cout << endl;
 			loop = false;
+			*/
 			break;
 		} // End Case 5
 		default:
@@ -432,17 +443,19 @@ int main()
 	} // End While loop for Menu
 
 	// size variable is same for both arrays because of parallel arrays.
-	int personCount = aPersonByName.GetLength();
+	//int personCount = aPersonByName.GetLength();
 
 	// Clean up allocated memory for Person Objects.
+	/*
 	for (int index = 0; index < objectCount; ++index) {
 		delete aPersonByName[index];
 		delete aPersonByBday[index];
 	}
+	*/
 
 	return 0;
 }
-
+/*
 void displayPersonName(Person & anItem)
 {
 	nameOut << anItem << endl;
@@ -452,8 +465,9 @@ void displayPersonBday(Person & anItem)
 {
 	bdayOut << anItem << endl;
 }
+*/
 
-void displayPerson(Person & anItem)
+void displayPerson(Assembly & anItem)
 {
 	cout << anItem << endl;
 }
