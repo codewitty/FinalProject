@@ -252,7 +252,7 @@ bool Assembly::operator>(const Assembly &right)
 	return retval;
 }
 
-bool Assembly::operator==(const Assembly &right)
+bool Assembly::operator==(const Assembly &right) const
 {
 	// These are the Assembly member types we are processing.
 	// NONE,        (==> unassigned)

@@ -40,8 +40,9 @@ bool addItem(Assembly * anItem){
 	return true;
 }
 
-bool searchItem(Assembly searchItem, assemblyAttribute order) {
-	bool retVal{false};
+bool searchItem(Assembly * searchItem) {
+	bool retVal{true};
+	assemblyList.find(*searchItem);
 	/*
 	if (order == NAME) {
 		if (nameTree.contains(searchItem))
@@ -72,8 +73,10 @@ bool searchItem(Assembly searchItem, assemblyAttribute order) {
 	return retVal;
 }
 
-bool deleteItem(Assembly genome_to_delete, assemblyAttribute order){
+bool deleteItem(Assembly genome_to_delete){
 	bool retVal{false};
+	if (assemblyList.remove(genome_to_delete))
+		retVal = true;
 	/*
 	if (order == NAME)
 	{
@@ -220,14 +223,13 @@ int main()
 			string new_bday;
 			while (flag) {
 				cout << " Enter the name data item for the new node.\n" << " ";
-/*
-				Assembly * temp1 = AssemblyByName01;
-				Assembly * temp2 = AssemblyByName02;
-				Assembly * temp3 = AssemblyByName03;
+
+				Assembly * temp1 = &AssemblyByName01;
+				Assembly * temp2 = &AssemblyByName02;
+				Assembly * temp3 = &AssemblyByName03;
 				addItem(temp1);
 				addItem(temp2);
 				addItem(temp3);
-				*/
 				/*
 				getline(cin, new_name);
 				cout << " Enter the birthday data item for the new node. "
@@ -263,6 +265,9 @@ int main()
 			while (sflag)
 			{
 				cout << " Enter the name of the person you would like to look for.\n";
+				Assembly * temp3 = &AssemblyByName03;
+				if (searchItem(temp3))
+					cout << "\nData item found" << endl;
 				/*j
 				getline(cin, name);
 				string tname = trim(name);
@@ -309,8 +314,12 @@ int main()
 		//************************************************************//
 		case 4: // Delete a particular Node by Name
 		{
-			bool removingDataItems = true;
-			string r_name;
+			bool removingDataItems = false;
+
+			//Assembly * del3 = &AssemblyByName03;
+			if (deleteItem(AssemblyByName03)) // DELETE entrypoint!
+				cout << "Deleting done" << endl;
+
 
 			// loop allows you to keep deleting items to your hearts content...
 			/*
@@ -328,10 +337,10 @@ int main()
 				{
 					cout << "Item not found or deleted." << endl;
 				}
-				// Set flag using exit function
-				removingDataItems = exitFunction();
 			}
 			*/
+			// Set flag using exit function
+			removingDataItems = exitFunction();
 		break;
 	} // End switch
 
@@ -396,6 +405,7 @@ int main()
 			bdayOut << string(80, '=') << endl;
 			bdayTree.breadthfirstTraverse(displayPersonBday);
 			*/
+			assemblyList.print();
 		}
 		break;
 
@@ -430,10 +440,11 @@ int main()
 			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
 			bdayOut << string(80, '=') << endl;
 			bdayTree.breadthfirstTraverse(displayPersonBday);
-			cout << endl << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl;
 			cout << endl;
-			loop = false;
 			*/
+			assemblyList.print();
+			cout << endl << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl;
+			loop = false;
 			break;
 		} // End Case 5
 		default:

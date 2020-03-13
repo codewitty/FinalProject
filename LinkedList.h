@@ -43,6 +43,9 @@ public:
 	// Inserts an item into the list at position index
 	bool insert(const T& newItem);
 
+	// Finds an item in the list
+	bool find(const T& newItem);
+
 	// Append "it" at the end of the list
 	// The client must ensure that the list's capacity is not exceeded
 	bool append(const T& newItem);
@@ -299,6 +302,23 @@ inline bool LinkedList<T>::insert(const T & newItem)
 		retVal = addAscending(newItem);
 	else if (listOrder == DESCENDING)
 		retVal = addDescending(newItem);
+	return retVal;
+}
+
+//**********************************************************************//
+// This is the public function for find.   After the user instantiates  //
+// a list of one of 3 types(ascending, descending and unordered),		//
+// this function selects the correct insertion function for add.		//
+// This is a covering function.											//
+// pre:  User provides item data to find in list.						//
+// return: return true if find successful, else false.					//
+//**********************************************************************//
+template<typename T>
+inline bool LinkedList<T>::find(const T & newItem)
+{
+	bool retVal(false);
+	if (findItemNode(newItem))
+		retVal = true;
 	return retVal;
 }
 
