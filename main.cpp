@@ -71,7 +71,8 @@ void rowsplit(const std::string& str, Array<string>& row, char delim = ',')
 int objectCount = 0;
 
 BNTree<Assembly> assemblyTree;
-LinkedList<Assembly> assemblyList;
+LinkedList<Assembly> assemblyList(ASCENDING);
+LinkedList<Assembly> assemblyListByN50(DESCENDING);
 Assembly AssemblyByName01("contig-20.fa", "pilon+idba", 2637, 2182179, 306, 0.1573, 0.1964, NAME);
 Assembly AssemblyByName02("contig-30.fa", "Spades", 2130, 1660411, 321, 0.5292, 0.3762, NAME);
 Assembly AssemblyByName03("contig-40.fa", "MosaicFLye", 2309, 2463148, 265, 0.8489, 0.759, NAME);
@@ -247,8 +248,10 @@ int main()
 		SkipBOM(inFile);
 		while (!inFile.eof() && count < number_of_lines) {
 			// skip the csv header
-			if (count == 0)
+			if (count == 0) {
 				getline(inFile, csvLine);
+				count++;
+			}
 
 			const int GNomeCSVCols = 7;              // Maximum persons in our database
 
@@ -274,7 +277,8 @@ int main()
 			assemblyBySize[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, SIZE);
 
 			//// Add to person to name and birthday BST's
-			//nameTree.add(*aPersonByName[count]);
+			assemblyList.insert(*assemblyByName[count]);
+			assemblyListByN50.insert(*assemblyByN50[count]);
 			//bdayTree.add(*aPersonByBday[count]);
 
 			count++;
@@ -323,13 +327,13 @@ int main()
 			while (flag) {
 				cout << " Enter the name data item for the new node.\n" << " ";
 
+				/*
 				Assembly * temp1 = &AssemblyByName01;
 				Assembly * temp2 = &AssemblyByName02;
 				Assembly * temp3 = &AssemblyByName03;
 				addItem(temp1);
 				addItem(temp2);
 				addItem(temp3);
-				/*
 				getline(cin, new_name);
 				cout << " Enter the birthday data item for the new node. "
 					<< "Format is yyy-mm-dd.\n";
@@ -505,6 +509,8 @@ int main()
 			bdayTree.breadthfirstTraverse(displayPersonBday);
 			*/
 			assemblyList.print();
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~COL 4~~~~~" << endl;
+			assemblyListByN50.print();
 		}
 		break;
 
@@ -542,6 +548,8 @@ int main()
 			cout << endl;
 			*/
 			assemblyList.print();
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~COL 4~~~~~" << endl;
+			assemblyListByN50.print();
 			cout << endl << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl;
 			loop = false;
 			break;
