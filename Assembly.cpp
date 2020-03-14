@@ -1,5 +1,6 @@
-#include "Assembly.h"
 #include <string>
+#include <iomanip>
+#include "Assembly.h"
 
 Assembly::Assembly()
 {
@@ -314,7 +315,9 @@ Assembly & Assembly::operator=(const Assembly &right)
 
 std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 {
-	strm << obj.name << ", " << obj.type << ", " << obj.num_contigs << ", "
-		<< obj.size << ", " << obj.n50 << ", " << obj.gc << ", " << obj.unknown;
+	//strm << setw(70) << left << obj.name << ", " << setw(10) << obj.type << ", " << setw(10) << obj.num_contigs << ", "
+	//	<< setw(10) << obj.size << ", " << setw(10) << obj.n50 << ", " << setw(10) << obj.gc << ", " << setw(10) << obj.unknown;
+	strm << setw(100) << left << obj.name << setw(20) << obj.type << setw(10) << obj.num_contigs 
+		<< setw(10) << obj.size << setw(10) << obj.n50 << setw(10) << obj.gc << setw(10) << obj.unknown;
 	return strm;
 }
