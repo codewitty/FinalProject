@@ -67,107 +67,71 @@ void rowsplit(const std::string& str, Array<string>& row, char delim = ',')
 // Forward Declarations
 //void displayPersonName(Person & anItem);
 //void displayPersonBday(Person & anItem);
-//void displayPerson(Person & anItem);
+void displayPerson(Assembly & anItem);
 int objectCount = 0;
 
 BNTree<Assembly> assemblyTree;
-LinkedList<Assembly> assemblyList(ASCENDING);
-LinkedList<Assembly> assemblyListByN50(DESCENDING);
+LinkedList<Assembly> assemblyList;
+/*
 Assembly AssemblyByName01("contig-20.fa", "pilon+idba", 2637, 2182179, 306, 0.1573, 0.1964, NAME);
 Assembly AssemblyByName02("contig-30.fa", "Spades", 2130, 1660411, 321, 0.5292, 0.3762, NAME);
 Assembly AssemblyByName03("contig-40.fa", "MosaicFLye", 2309, 2463148, 265, 0.8489, 0.759, NAME);
+*/
 
 // Covering function for generic add.
-bool addItem(Assembly * anItem){
+bool addItem(Assembly * anItem, assemblyAttribute keyType){
 	// 1. Simple validation
 	// 2. Add to all 3 data structures
 
 	// TREE ADD CODE
-	assemblyTree.add(*anItem);
+	if (keyType == NAME)
+		assemblyTree.add(*anItem);
+
 	// HASH ADD CODE tbd
 	// Ex. BdayHash.add(*name)
 
-	// MRU LINKED LIST ADD CODE tbd
-	assemblyList.insert(*anItem);
+	// LINKED LIST ADD CODE
+	else if (keyType == N50)
+		assemblyList.insert(*anItem);
 	// 3. Report results
 	return true;
 }
 
-bool searchItem(Assembly * searchItem) {
-	bool retVal{true};
-	assemblyList.find(*searchItem);
-	/*
-	if (order == NAME) {
-		if (nameTree.contains(searchItem))
-		{
-			cout << "\nData item found" << endl;
-			cout << nameTree.find(searchItem);
-			retVal = true;
-		}
+bool searchItem(Assembly searchGenome) {
+	bool retVal{false};
+	if (assemblyTree.contains(searchGenome)) {
+		cout << "\nHere is the Data item found in the BST" << endl;
+		Assembly foundGenome = assemblyTree.find(searchGenome);
+		cout << foundGenome;
+		cout << "\nHere is the Data item found in the Linked List" << endl;
+		foundGenome.setOrdering(N50);
+		Assembly listGenome = assemblyList.findItem(foundGenome);
+		cout << listGenome;
+		retVal = true;
 	}
-	else if (order == BDAY)
-	{
-		if (bdayTree.contains(searchItem))
-		{
-			cout << "\nData item found" << endl;
-			cout << bdayTree.find(searchItem);
-			retVal = true;
-		}
-	}
-	return retVal;
-
-	// HASH DELETE CODE tbd
-	// Ex. BdayHash.delete(*name)
-
-	// MRU LINKED LIST DELETE CODE tbd
-
-	// 3. Report results
-	*/
 	return retVal;
 }
 
 bool deleteItem(Assembly genome_to_delete){
 	bool retVal{false};
-	if (assemblyList.remove(genome_to_delete))
+	if (!assemblyTree.contains(genome_to_delete)) {
+		cout << "\n Data item not found" << endl;
+		retVal = false;
+	}
+	else {
+		// ==> foundPersonRecord found by name, get the record.
+		Assembly deleteGenome = assemblyTree.find(genome_to_delete);
+		cout << " We are deleting this genome" << endl;
+		cout << " " << deleteGenome;
+		assemblyTree.remove(deleteGenome);
+		cout << "\nHere is the Data item to be removed from the Linked List" << endl;
+		deleteGenome.setOrdering(N50);
+		Assembly listDeleteGenome = assemblyList.findItem(deleteGenome);
+		cout << listDeleteGenome;
+		cout << "\nGenome removed from the Linked List" << endl;
 		retVal = true;
-	/*
-	if (order == NAME)
-	{
-		if (!nameTree.contains(person_to_delete))
-		{
-			cout << "\n Data item not found" << endl;
-			retVal = false;
 		}
-		else {
-			// ==> foundPersonRecord found by name, get the record.
-			Person foundPersonRecord = nameTree.find(person_to_delete);
-			cout << " We are deleting this person" << endl;
-			cout << " " << foundPersonRecord;
-			nameTree.remove(foundPersonRecord);
-			// reset search criteria so we can delete from the birthday tree
-			foundPersonRecord.setOrdering(BDAY);
-			bdayTree.remove(foundPersonRecord);
-		}
-	}
-
-	else if (order == BDAY)
-	{
-		if (!bdayTree.contains(person_to_delete))
-		{
-			cout << "\n Data item not found" << endl;
-			retVal = false;
-		}
-		else {
-			// ==> foundPersonRecord found by name, get the record.
-			Person foundPersonRecord = bdayTree.find(person_to_delete);
-			cout << " We are deleting this person" << endl;
-			cout << " " << foundPersonRecord;
-			bdayTree.remove(foundPersonRecord);
-			// reset search criteria so we can delete from the name tree
-			foundPersonRecord.setOrdering(NAME);
-			nameTree.remove(foundPersonRecord);
-		}
-	}
+/*
 	// HASH DELETE CODE tbd
 	// Ex. BdayHash.delete(*name)
 
@@ -276,10 +240,11 @@ int main()
 			assemblyByN50[count]     = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, N50);
 			assemblyBySize[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, SIZE);
 
-			//// Add to person to name and birthday BST's
-			assemblyList.insert(*assemblyByName[count]);
-			assemblyListByN50.insert(*assemblyByN50[count]);
-			//bdayTree.add(*aPersonByBday[count]);
+			//// Add to Linked List, Hash Table and BST
+			addItem(assemblyByName[count], NAME);
+			addItem(assemblyByContigs[count], NUM_CONTIGS);
+			addItem(assemblyByN50[count], N50);
+			addItem(assemblyBySize[count], SIZE);
 
 			count++;
 		}
@@ -301,12 +266,10 @@ int main()
 		cout << endl
 			 << "   What operation would you like to carry out?" << endl;
 		cout << "   1: Add a Node item" << endl;
-		cout << "   2: Search for a Node by Name" << endl;
-		cout << "   3: Search for a Node by Birthday" << endl;
-		cout << "   4: Delete a Node by Name" << endl;
-		cout << "   5: Delete a Node by Birthday" << endl;
-		cout << "   6: Print data" << endl;
-		cout << "   7: EXIT" << endl << endl;
+		cout << "   2: Search for a Genome" << endl;
+		cout << "   3: Delete a Genome" << endl;
+		cout << "   4: Print data" << endl;
+		cout << "   5: EXIT" << endl << endl;
 		cout << "   Your Choice: ";
 		// User response recorded
 		cin >> choice;
@@ -361,51 +324,22 @@ int main()
 		//************************************************************//
 		// case 2 SEARCHES for a user specified node.				  //
 		//************************************************************//
-		case 2: // Search for a particular Node by Name 
+		case 2: // Search for a particular Genome by Name 
 		{
 			bool sflag = true;
 			string name;
 			while (sflag)
 			{
-				cout << " Enter the name of the person you would like to look for.\n";
-				Assembly * temp3 = &AssemblyByName03;
-				if (searchItem(temp3))
-					cout << "\nData item found" << endl;
-				/*j
+				cout << " Enter the name of the genome assembly you would like to look for.\n";
 				getline(cin, name);
 				string tname = trim(name);
-				Person search_name(tname, "000-00-00", NAME);
+				Assembly search_genome(tname, "", 0, 0, 0, 0.0, 0.0, NAME);
 
-				if (searchItem(search_name, NAME))
+				if (searchItem(search_genome)) {
 					cout << "\nData item found" << endl;
+				}
 				else
 					cout << "\nData item not found" << endl;
-				// Set flag using exit function
-				*/
-				sflag = exitFunction();
-			}
-			break;
-		}
-		//************************************************************//
-		// case 3 SEARCHES for a user specified node.				  //
-		//************************************************************//
-		case 3: // Search for a particular Node by Bday
-		{
-			bool sflag = true;
-			string bday;
-			while (sflag)
-			{
-				cout << " Enter the birthday of the person you would like to look for.\n";
-				/*
-				getline(cin, bday);
-				string tbday = trim(bday);
-				Person search_bday("", tbday, BDAY);
-
-				if (searchItem(search_bday, BDAY))
-					cout << "\nData item found" << endl;
-				else
-					cout << "\nData item not found" << endl;
-					*/
 				// Set flag using exit function
 				sflag = exitFunction();
 			}
@@ -413,26 +347,27 @@ int main()
 		}
 
 		//************************************************************//
-		// case 4 DELETES a node from both existing trees by Name.	  //
+		// case 3 DELETES a genome from both all data structures. 	  //
 		//************************************************************//
-		case 4: // Delete a particular Node by Name
+		case 3: // Delete a particular Node by Name
 		{
-			bool removingDataItems = false;
+			bool removingDataItems = true;
+			string r_name;
 
 			//Assembly * del3 = &AssemblyByName03;
-			if (deleteItem(AssemblyByName03)) // DELETE entrypoint!
-				cout << "Deleting done" << endl;
+			//if (deleteItem(AssemblyByName03)) // DELETE entrypoint!
+			//	cout << "Deleting done" << endl;
 
 
-			// loop allows you to keep deleting items to your hearts content...
-			/*
+			 //loop allows you to keep deleting items to your hearts content...
 			while (removingDataItems) {
 				cout << " Enter the name of the person item to be deleted.\n";
 				cout << " ";
 				getline(cin, r_name);
-				Person name_to_delete(r_name, "", NAME);  // sparse record wtih user entered name
+				string tname = trim(r_name);
+				Assembly delete_genome(tname, "", 0, 0, 0, 0.0, 0.0, NAME);
 				// deleteItem is the entry point to delete the item from ALL data structures.
-				if (deleteItem(name_to_delete, NAME)) // DELETE entrypoint!
+				if (deleteItem(delete_genome)) // DELETE entrypoint!
 				{
 					cout << "Deleting done" << endl;
 				}
@@ -440,48 +375,18 @@ int main()
 				{
 					cout << "Item not found or deleted." << endl;
 				}
-			}
-			*/
 			// Set flag using exit function
 			removingDataItems = exitFunction();
+			}
 		break;
-	} // End switch
+		} // End switch
 
 		//************************************************************//
-		// case 5 DELETES a node from both existing trees by Birthday.//
-		//************************************************************//
-		case 5: // Delete a particular Node by Birthday
-		{
-			bool removingDataItems = true;
-			string r_bday;
-/*
-			// loop allows you to keep deleting items to your hearts content...
-			while (removingDataItems) {
-				cout << " Enter the birthday of the person item to be deleted.\n";
-				cout << " ";
-				getline(cin, r_bday);
-				Person bday_to_delete("", r_bday, BDAY);  // sparse record wtih user entered name
-				// deleteItem is the entry point to delete the item from ALL data structures.
-				if (deleteItem(bday_to_delete, BDAY)) // DELETE entrypoint!
-				{
-					cout << "Deleting done" << endl;
-				}
-				else 
-				{
-					cout << "Item not found or deleted." << endl;
-				}
-				// Set flag using exit function
-				removingDataItems = exitFunction();
-			}
-			*/
-		break;
-		} // End switch case 5
-		//************************************************************//
-		// case 6 PRINTS all node from both existing trees.			  //
+		// case 4 PRINTS all node from both existing trees.			  //
 		// Name Tree is printed in Preorder and Postorder modes.	  //
 		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
 		//************************************************************//
-		case 6:
+		case 4:
 		{
 			/*
 
@@ -510,17 +415,17 @@ int main()
 			*/
 			assemblyList.print();
 			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~COL 4~~~~~" << endl;
-			assemblyListByN50.print();
+			//assemblyByN50.print();
 		}
 		break;
 
 		//************************************************************//
-		// case 7 PRINTS all node from both existing trees and		  //
+		// case 5 PRINTS all node from both existing trees and		  //
 		//		 exits the menu.									  //
 		// Name Tree is printed in Preorder and Postorder modes.	  //
 		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
 		//************************************************************//
-		case 7:
+		case 5:
 		{
 			/*
 			nameOut << endl << "...!!!!...DISPLAYING NAME TREE...!!!!..." << endl;
@@ -547,16 +452,17 @@ int main()
 			bdayTree.breadthfirstTraverse(displayPersonBday);
 			cout << endl;
 			*/
-			assemblyList.print();
 			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~COL 4~~~~~" << endl;
-			assemblyListByN50.print();
+			assemblyList.print();
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY Name~~~~~~~~COL 1~~~~~" << endl;
+			assemblyTree.inorderTraverse(displayPerson);
 			cout << endl << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl;
 			loop = false;
 			break;
-		} // End Case 5
+		} // End Case 6
 		default:
 			cout << "   Please enter a valid choice between"
-				<< "   1-7" << endl;
+				<< "   1-5" << endl;
 		} // End Switch for Menu
 	} // End While loop for Menu
 

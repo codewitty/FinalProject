@@ -1,14 +1,11 @@
 #pragma once
 #include "Node.h"
-
-using namespace std;
-
 // Enumerator class for sorting types
 enum Sorting {
 	UNORDERED,
 	ASCENDING,
 	DESCENDING
-} sortOrder;
+};
 
 template <typename T>
 class LinkedList {
@@ -30,6 +27,7 @@ private:
 	bool addDescending(const T& newItem);	// Enum is DESCENDING
 
 public:
+	T findItem(const T& target);
 	// Constructors
 	LinkedList(Sorting ordering);
 	LinkedList();
@@ -98,7 +96,7 @@ public:
 // return: Returns the address of the target item node.					//
 //**********************************************************************// 
 template<typename T>
-inline Node<T>* LinkedList<T>::findItemNode(const T & target) const
+inline Node<T>* LinkedList<T>::findItemNode(const T& target) const
 {
 	bool found(false);
 	Node<T>* currPtr = head;
@@ -110,6 +108,19 @@ inline Node<T>* LinkedList<T>::findItemNode(const T & target) const
 			currPtr = currPtr->getNext();
 	}
 	return currPtr;
+}
+
+//**********************************************************************//
+// This is a private utility member function used to find a target node // 
+// pre: User provides the item to be found.								//
+// post: N/A.															//
+// return: Returns the address of the target item node.					//
+//**********************************************************************// 
+template<typename T>
+inline T LinkedList<T>::findItem(const T& target)
+{
+	Node<T>* foundPtr = findItemNode(target);
+	return foundPtr->getItem();
 }
 
 //**********************************************************************//
@@ -232,7 +243,7 @@ inline LinkedList<T>::LinkedList(Sorting ordering)
 template<typename T>
 inline LinkedList<T>::LinkedList()
 {
-	listOrder = UNORDERED;
+	listOrder = ASCENDING;
 	head = nullptr;
 	tail = nullptr;
 	curr = nullptr;

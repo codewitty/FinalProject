@@ -3,7 +3,7 @@
 #include <string>
 
 #include "hash.h"
-
+/*
 HashTable::HashTable()
 {
 	for (int i = 0; i < tableSize; i++) {
@@ -102,3 +102,4 @@ void HashTable::printItemsInIndex(int index)
 	}
 
 }
+*/
