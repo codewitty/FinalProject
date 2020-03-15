@@ -114,7 +114,6 @@ bool searchItem(Assembly searchGenome) {
 }
 
 bool deleteItem(Assembly genome_to_delete){
-	genome_to_delete.setOrdering(NUM_CONTIGS);
 	bool retVal{false};
 	if (!assemblyTreeName.contains(genome_to_delete)) {
 		cout << "\n Data item not found" << endl;
@@ -131,6 +130,7 @@ bool deleteItem(Assembly genome_to_delete){
 		deleteGenome.setOrdering(N50);
 		Assembly listDeleteGenome = assemblyList.findItem(deleteGenome);
 		cout << listDeleteGenome;
+		assemblyList.remove(listDeleteGenome);
 		cout << "\nGenome removed from the Linked List" << endl;
 		retVal = true;
 		}
