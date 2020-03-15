@@ -6,7 +6,7 @@ class Array
 {
 private:
 	int m_nLength;
-	T *m_ptData;
+	T* m_ptData;
 
 public:
 	Array();
@@ -22,14 +22,14 @@ public:
 	// PRE    : target index array request.                                 //
 	// RETURN : Reference of the Array object we are targeting.             //
 	//**********************************************************************//
-	T& operator[](int &nIndex);
+	T& operator[](int& nIndex);
 
 	//**********************************************************************//
 	// Array operator [] - our Array subscript operator                     //
 	// PRE    : target index array request.                                 //
 	// RETURN : Reference of the Array object we are targeting.             //
 	//**********************************************************************//
-	T& operator[](const int &nIndex);
+	T& operator[](const int& nIndex);
 
 	// The length of the array is always an integer
 	// It does not depend on the data type of the array
@@ -76,7 +76,7 @@ void Array<T>::Erase()
 
 // Subscript overload operator for Array Template
 template<typename T>
-T & Array<T>::operator[](int & nIndex)
+T& Array<T>::operator[](int& nIndex)
 {
 	if (nIndex >= 0 && nIndex < m_nLength)
 		return m_ptData[nIndex];
@@ -85,7 +85,7 @@ T & Array<T>::operator[](int & nIndex)
 
 // Subscript overload operator for Array Template
 template<typename T>
-T & Array<T>::operator[](const int & nIndex)
+T& Array<T>::operator[](const int& nIndex)
 {
 	if (nIndex >= 0 && nIndex < m_nLength)
 		return m_ptData[nIndex];

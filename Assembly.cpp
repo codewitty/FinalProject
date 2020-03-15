@@ -1,6 +1,5 @@
-#include <string>
-#include <iomanip>
 #include "Assembly.h"
+#include <string>
 
 Assembly::Assembly()
 {
@@ -52,31 +51,31 @@ void Assembly::setOrdering(assemblyAttribute anOrder)
 		this->keyType = NONE;
 		break;
 	case NAME:        // NAME and TYPE are strings
-		pkey = static_cast<void *>(&name);
+		pkey = static_cast<void*>(&name);
 		this->keyType = NAME;
 		break;
 	case TYPE:
-		pkey = static_cast<void *>(&type);
+		pkey = static_cast<void*>(&type);
 		this->keyType = TYPE;
 		break;
 	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
-		pkey = static_cast<void *>(&num_contigs);
+		pkey = static_cast<void*>(&num_contigs);
 		this->keyType = NUM_CONTIGS;
 		break;
 	case SIZE:
-		pkey = static_cast<void *>(&size);
+		pkey = static_cast<void*>(&size);
 		this->keyType = SIZE;
 		break;
 	case N50:
-		pkey = static_cast<void *>(&n50);
+		pkey = static_cast<void*>(&n50);
 		this->keyType = N50;
 		break;
 	case GC:          // GC, UNKNOWN are float
-		pkey = static_cast<void *>(&gc);
+		pkey = static_cast<void*>(&gc);
 		this->keyType = GC;
 		break;
 	case UNKNOWN:
-		pkey = static_cast<void *>(&unknown);
+		pkey = static_cast<void*>(&unknown);
 		this->keyType = UNKNOWN;
 		break;
 	default: // code to be executed if n doesn't match any cases
@@ -120,7 +119,7 @@ double Assembly::getUnknown()
 	return this->unknown;
 }
 
-void * Assembly::getPkey() const
+void* Assembly::getPkey() const
 {
 	return this->pkey;
 }
@@ -165,7 +164,7 @@ void Assembly::setUnknown(float aGNomeAssemblyUnknown)
 	this->unknown = aGNomeAssemblyUnknown;
 }
 
-bool Assembly::operator<(const Assembly &right) const
+bool Assembly::operator<(const Assembly& right)
 {
 	// These are the Assembly member types we are processing.
 	// NONE,        (==> unassigned)
@@ -186,18 +185,18 @@ bool Assembly::operator<(const Assembly &right) const
 		break;
 	case NAME:        // NAME and TYPE are strings
 	case TYPE:
-		if (*(static_cast<string *>(pkey)) < *(static_cast<string *>(right.pkey)))
+		if (*(static_cast<string*>(pkey)) < *(static_cast<string*>(right.pkey)))
 			retval = true;
 		break;
 	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
 	case SIZE:
 	case N50:
-		if (*(static_cast<int *>(pkey)) < *(static_cast<int *>(right.pkey)))
+		if (*(static_cast<int*>(pkey)) < *(static_cast<int*>(right.pkey)))
 			retval = true;
 		break;
 	case GC:          // GC, UNKNOWN are float
 	case UNKNOWN:
-		if (*(static_cast<float *>(pkey)) < *(static_cast<double *>(right.pkey)))
+		if (*(static_cast<float*>(pkey)) < *(static_cast<double*>(right.pkey)))
 			retval = true;
 		break;
 	default: // code to be executed if n doesn't match any cases
@@ -209,7 +208,7 @@ bool Assembly::operator<(const Assembly &right) const
 	return retval;
 }
 
-bool Assembly::operator>(const Assembly &right)
+bool Assembly::operator>(const Assembly& right)
 {
 	// These are the Assembly member types we are processing.
 	// NONE,        (==> unassigned)
@@ -230,18 +229,18 @@ bool Assembly::operator>(const Assembly &right)
 		break;
 	case NAME:        // NAME and TYPE are strings
 	case TYPE:
-		if (*(static_cast<string *>(pkey)) > *(static_cast<string *>(right.pkey)))
+		if (*(static_cast<string*>(pkey)) > * (static_cast<string*>(right.pkey)))
 			retval = true;
 		break;
 	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
 	case SIZE:
 	case N50:
-		if (*(static_cast<int *>(pkey)) > *(static_cast<int *>(right.pkey)))
+		if (*(static_cast<int*>(pkey)) > * (static_cast<int*>(right.pkey)))
 			retval = true;
 		break;
 	case GC:          // GC, UNKNOWN are float
 	case UNKNOWN:
-		if (*(static_cast<float *>(pkey)) > *(static_cast<double *>(right.pkey)))
+		if (*(static_cast<float*>(pkey)) > * (static_cast<double*>(right.pkey)))
 			retval = true;
 		break;
 	default: // code to be executed if n doesn't match any cases
@@ -253,7 +252,7 @@ bool Assembly::operator>(const Assembly &right)
 	return retval;
 }
 
-bool Assembly::operator==(const Assembly &right) const
+bool Assembly::operator==(const Assembly& right) const
 {
 	// These are the Assembly member types we are processing.
 	// NONE,        (==> unassigned)
@@ -274,18 +273,18 @@ bool Assembly::operator==(const Assembly &right) const
 		break;
 	case NAME:        // NAME and TYPE are strings
 	case TYPE:
-		if (*(static_cast<string *>(pkey)) == *(static_cast<string *>(right.pkey)))
+		if (*(static_cast<string*>(pkey)) == *(static_cast<string*>(right.pkey)))
 			retval = true;
 		break;
 	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
 	case SIZE:
 	case N50:
-		if (*(static_cast<int *>(pkey)) == *(static_cast<int *>(right.pkey)))
+		if (*(static_cast<int*>(pkey)) == *(static_cast<int*>(right.pkey)))
 			retval = true;
 		break;
 	case GC:          // GC, UNKNOWN are float
 	case UNKNOWN:
-		if (*(static_cast<float *>(pkey)) == *(static_cast<double *>(right.pkey)))
+		if (*(static_cast<float*>(pkey)) == *(static_cast<double*>(right.pkey)))
 			retval = true;
 		break;
 	default: // code to be executed if n doesn't match any cases
@@ -297,7 +296,7 @@ bool Assembly::operator==(const Assembly &right) const
 	return retval;
 }
 
-Assembly & Assembly::operator=(const Assembly &right)
+Assembly& Assembly::operator=(const Assembly& right)
 {
 	if (this != &right) {
 		this->name = right.name;
@@ -313,11 +312,18 @@ Assembly & Assembly::operator=(const Assembly &right)
 	return *this;
 }
 
-std::ostream & operator<<(std::ostream & strm, Assembly & obj)
+/*
+std::ostream& operator<<(std::ostream& strm, Assembly& obj)
 {
-	//strm << setw(70) << left << obj.name << ", " << setw(10) << obj.type << ", " << setw(10) << obj.num_contigs << ", "
-	//	<< setw(10) << obj.size << ", " << setw(10) << obj.n50 << ", " << setw(10) << obj.gc << ", " << setw(10) << obj.unknown;
-	strm << setw(80) << left << obj.name << setw(20) << obj.type << setw(15) << obj.num_contigs 
-		<< setw(10) << obj.size << setw(10) << obj.n50 << setw(10) << obj.gc << setw(10) << obj.unknown;
+	strm << obj.name << ", " << obj.type << ", " << obj.num_contigs << ", "
+		<< obj.size << ", " << obj.n50 << ", " << obj.gc << ", " << obj.unknown;
+	return strm;
+}
+*/
+
+std::ostream& operator<<(std::ostream& strm, Assembly& obj)
+{
+	strm << obj.name << endl << obj.type << endl << obj.num_contigs << endl
+		<< obj.size << endl << obj.n50 << endl << obj.gc << endl << obj.unknown;
 	return strm;
 }

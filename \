@@ -1,8 +1,5 @@
 #pragma once
 #include "Node.h"
-
-using namespace std;
-
 // Enumerator class for sorting types
 enum Sorting {
 	UNORDERED,
@@ -30,6 +27,7 @@ private:
 	bool addDescending(const T& newItem);	// Enum is DESCENDING
 
 public:
+	T findItem(const T& target);
 	// Constructors
 	LinkedList(Sorting ordering);
 	LinkedList();
@@ -113,6 +111,19 @@ inline Node<T>* LinkedList<T>::findItemNode(const T& target) const
 }
 
 //**********************************************************************//
+// This is a private utility member function used to find a target node // 
+// pre: User provides the item to be found.								//
+// post: N/A.															//
+// return: Returns the address of the target item node.					//
+//**********************************************************************// 
+template<typename T>
+inline T LinkedList<T>::findItem(const T& target)
+{
+	Node<T>* foundPtr = findItemNode(target);
+	return foundPtr->getItem();
+}
+
+//**********************************************************************//
 // This is a private utility function to add items to the list in an    //
 // unordered manner. The covering function for add will call this if	//
 // the list is instantiated with the unordered enumeration.				// 
@@ -121,7 +132,7 @@ inline Node<T>* LinkedList<T>::findItemNode(const T& target) const
 // return: return true if successful, else false.						//
 //**********************************************************************//
 template<typename T>
-inline bool LinkedList<T>::addUnordered(const T& newItem)
+inline bool LinkedList<T>::addUnordered(const T & newItem)
 {
 	Node<T>* newNode = new Node<T>(newItem);
 	// if the list is empty list, set tail to the first entry.
@@ -145,7 +156,7 @@ inline bool LinkedList<T>::addUnordered(const T& newItem)
 // return: return true if successful, else false.						//
 //**********************************************************************//
 template<typename T>
-inline bool LinkedList<T>::addAscending(const T& newItem)
+inline bool LinkedList<T>::addAscending(const T & newItem)
 {
 	Node<T>* newNode = new Node<T>(newItem);
 	// First check for empty list and act accordingly
@@ -178,7 +189,7 @@ inline bool LinkedList<T>::addAscending(const T& newItem)
 //**********************************************************************//
 
 template<typename T>
-inline bool LinkedList<T>::addDescending(const T& newItem)
+inline bool LinkedList<T>::addDescending(const T & newItem)
 {
 	Node<T>* newNode = new Node<T>(newItem);
 	Node<T>* currPtr = nullptr;
@@ -232,7 +243,7 @@ inline LinkedList<T>::LinkedList(Sorting ordering)
 template<typename T>
 inline LinkedList<T>::LinkedList()
 {
-	listOrder = UNORDERED;
+	listOrder = ASCENDING;
 	head = nullptr;
 	tail = nullptr;
 	curr = nullptr;
@@ -292,7 +303,7 @@ inline void LinkedList<T>::clear()
 // return: return true if successful, else false.						//
 //**********************************************************************//
 template<typename T>
-inline bool LinkedList<T>::insert(const T& newItem)
+inline bool LinkedList<T>::insert(const T & newItem)
 {
 	bool retVal(false);
 	// UNORDERED implies prepend.
@@ -314,7 +325,7 @@ inline bool LinkedList<T>::insert(const T& newItem)
 // return: return true if find successful, else false.					//
 //**********************************************************************//
 template<typename T>
-inline bool LinkedList<T>::find(const T& newItem)
+inline bool LinkedList<T>::find(const T & newItem)
 {
 	bool retVal(false);
 	if (findItemNode(newItem))
@@ -323,7 +334,7 @@ inline bool LinkedList<T>::find(const T& newItem)
 }
 
 template<typename T>
-inline bool LinkedList<T>::append(const T& newItem)
+inline bool LinkedList<T>::append(const T & newItem)
 {
 	// Instantiate and initialize a new node to append to the list.
 	Node<T>* newNode = new Node<T>(newItem, nullptr);
@@ -353,7 +364,7 @@ inline bool LinkedList<T>::append(const T& newItem)
 // return: return true if remove successful, else false.				//
 //**********************************************************************//
 template<typename T>
-inline bool LinkedList<T>::remove(const T& anItem)
+inline bool LinkedList<T>::remove(const T & anItem)
 {
 	// first validate the target item is in the list.
 	curr = findItemNode(anItem);
@@ -529,8 +540,8 @@ inline void LinkedList<T>::print()
 	}
 	while (index != nullptr) {
 		T anItem;
-		anItem = index->getItem();
-		cout << "Item [" << anItem << "]\n";
+		anItem = index ->getItem();
+		cout << anItem << endl;
 		index = index->getNext();
 	}
 	cout << "\nTotal Item Count : " << itemCount << "\n";

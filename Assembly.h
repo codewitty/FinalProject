@@ -23,7 +23,7 @@ protected:
 	int               n50;
 	double            gc;
 	double            unknown;
-	void             *pkey;
+	void* pkey;
 	assemblyAttribute keyType;
 
 public:
@@ -49,7 +49,7 @@ public:
 	int    getN50() const;
 	double getGc() const;
 	double getUnknown();
-	void * getPkey() const;
+	void* getPkey() const;
 	assemblyAttribute getKeyType() const;
 
 	// Mutators
@@ -66,25 +66,25 @@ public:
 	// pre:  Person objects we want to compare.                             //
 	// return: result of comparing the operands (>)                         //
 	//**********************************************************************//
-	virtual bool operator < (const Assembly &) const;		// Overloaded >
+	virtual bool operator < (const Assembly&);		// Overloaded >
 
 	//**********************************************************************//
 	// Person operator >                                                    //
 	// pre:  Person objects we want to compare.                             //
 	// return: result of comparing the operands (>)                         //
 	//**********************************************************************//
-	virtual bool operator > (const Assembly &);		// Overloaded >
+	virtual bool operator > (const Assembly&);		// Overloaded >
 
 	// istream and ostream overloading as friends
-	friend std::ostream& operator << (std::ostream &out, Assembly &right);
-
+	//friend std::ostream& operator << (std::ostream& out, Assembly& right);
+	friend std::ostream& operator << (std::ostream& out, Assembly& right);
 
 	//**********************************************************************//
 	// Person operator ==                                                   //
 	// pre:  Person objects we want to compare.                             //
 	// return: result of comparing the operands (==)                        //
 	//**********************************************************************//
-	bool operator == (const Assembly &) const;		// Overloaded >
+	bool operator == (const Assembly&) const;		// Overloaded >
 
 	//**********************************************************************//
 	// Person operator =                                                    //
@@ -92,5 +92,5 @@ public:
 	//       operation on.                                                  //
 	// return: result of assign one operand the result of an RHS expression.//
 	//**********************************************************************//
-	virtual Assembly& operator=(const Assembly &);  // overloaded =
+	virtual Assembly& operator=(const Assembly&);  // overloaded =
 };

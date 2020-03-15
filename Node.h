@@ -46,7 +46,7 @@ inline Node<T>::Node() : next(nullptr)
 //		 next pointer initialized to nullptr							//
 //**********************************************************************//
 template<class T>
-inline Node<T>::Node(const T & anItem) : item(anItem), next(nullptr)
+inline Node<T>::Node(const T& anItem) : item(anItem), next(nullptr)
 {
 	// Bsically just initilizes the member variables.
 	// alternatively item = anItem; next = nullptr;
@@ -59,7 +59,7 @@ inline Node<T>::Node(const T & anItem) : item(anItem), next(nullptr)
 //		 next pointer initialized to user provided node address.		//
 //**********************************************************************//
 template<class T>
-inline Node<T>::Node(const T & anItem, Node<T>* nextNode) : item(anItem), next(nextNode)
+inline Node<T>::Node(const T& anItem, Node<T>* nextNode) : item(anItem), next(nextNode)
 {
 	// Bsically just initilizes the member variables.
 	// alternatively item = anItem; next = nextNode;
@@ -78,7 +78,7 @@ inline Node<T>::~Node()
 // post: A Node item is set to user provided data.						//
 //**********************************************************************//
 template<class T>
-inline void Node<T>::setItem(const T & anItem)
+inline void Node<T>::setItem(const T& anItem)
 {
 	item = anItem;
 }

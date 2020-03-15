@@ -4,14 +4,15 @@
 #include <iomanip>
 #include "ArrayTemplateClass.h"
 #include "HandyUtils.h"
+#include "LinkedList.h"
 #include "BSTNode.h"
 #include "BNTree.h"
 #include "2-3BTreeError.h"
 #include "2-3BTreeNode.h"
 #include "2-3BTree.h"
-#include "LinkedList.h"
 #include "Node.h"
 #include "Assembly.h"
+#include "hash.h"
 
 using namespace std;
 
@@ -79,21 +80,24 @@ BNTree<Assembly> assemblyTree;
 BNTree<Assembly> assemblyTreeName;
 LinkedList<Assembly> assemblyList;
 CTree<Assembly> assemblyCTree;
+HashTable table;
 
 // Covering function for generic add.
 bool addItem(Assembly * anItem){
 	// 1. Simple validation
 	// 2. Add to all 3 data structures
 
+	// HASH ADD CODE tbd
+	table.add(*anItem);
+
 	// TREE ADD CODE
 	assemblyTreeName.add(*anItem);
 	anItem->setOrdering(NUM_CONTIGS);
 	assemblyTree.add(*anItem);
 	// 2-3 tree...
-	//assemblyCTree.insert(anItem);
+	assemblyCTree.insert(anItem);
 
-	// HASH ADD CODE tbd
-	// Ex. BdayHash.add(*name)
+
 	
 	// LINKED LIST ADD CODE
 	anItem->setOrdering(N50);
@@ -286,6 +290,7 @@ int main()
 		{
 			bool flag = true;
 			string new_genome;
+			string new_method;
 			string Name;
 			string Method;
 			int    NumContigs;
@@ -296,10 +301,10 @@ int main()
 			while (flag) {
 				cout << " Enter the name for the new Genome. " << endl;
 				getline(cin, new_genome);
-				string Name = trim(new_genome);
+				Name = trim(new_genome);
 				cout << " Enter the method for the new Genome. " << endl;
-				getline(cin, new_genome);
-				string aMethod = trim(new_genome);
+				getline(cin, new_method);
+				Method = trim(new_method);
 				cout << " Enter the number of contigs for the new Genome. " << endl;
 				cin >> NumContigs;
 				cout << " \nEnter the size of bases for the new Genome. " << endl;
@@ -310,6 +315,12 @@ int main()
 				cin >> GCContent;
 				cout << " \nEnter the percent unknown for the new Genome. " << endl;
 				cin >> PercentUnknown;
+				assemblyByName[count]    = new Assembly(Name, Method, NumContigs, SizeBases, N50kbp, GCContent, PercentUnknown, NAME);
+				//// Add to Linked List, Hash Table and BST
+				addItem(assemblyByName[count]);
+
+				count++;
+
 				/*
 					 < " A genome assembly consists of the following data items "
 					 << " A name, a type, the number of contigs( whole number only), 
@@ -407,7 +418,12 @@ int main()
 		//************************************************************//
 		case 4:
 		{
-			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY HASH TABLE SEQUENCE~~~~~~~~~~~~~" << endl;
+			cout << string(160, '=') << endl;
+			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(160, '=') << endl;
+			table.print();
 			break;
 		}
 
@@ -470,7 +486,15 @@ int main()
 		//************************************************************//
 		case 9:
 		{
-			cout << endl << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl;
+			int count = 0;
+			ofstream outFile;
+			outFile.open("Outfile.csv");
+			string aname = "wol_proteins.fasta.gz";
+			Assembly searchGenome(aname, "", 0, 0, 0, 0.0, 0.0, NAME);
+			Assembly foundGenome = assemblyTreeName.find(searchGenome);
+			outFile << foundGenome << endl;
+
+			cout << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl << endl << endl;
 			loop = false;
 			break;
 		} // End Case 6
@@ -503,12 +527,8 @@ template<class T>
 void printOrders(CTree<T>* pTree)
 {
 	int iItemCnt = 0;
-	pTree->print(preorder, &iItemCnt);
-	std::cout << "**preorder[" << iItemCnt << "]" << std::endl << std::endl;
 	pTree->print(inorder, &iItemCnt);
 	std::cout << "**inorder[" << iItemCnt << "]" << std::endl << std::endl;
-	pTree->print(postorder, &iItemCnt);
-	std::cout << "**postorder[" << iItemCnt << "]" << std::endl << std::endl;
 }
 
 // EOF Lab05BST_main.cpp
