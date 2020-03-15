@@ -4,15 +4,23 @@
 #include <iomanip>
 #include "ArrayTemplateClass.h"
 #include "HandyUtils.h"
+<<<<<<< HEAD
 #include "LinkedList.h"
+=======
+#include "Assembly.h"
+>>>>>>> 277bb5263a45931fdd94e49741de1b4235154467
 #include "BSTNode.h"
 #include "BNTree.h"
 #include "2-3BTreeError.h"
 #include "2-3BTreeNode.h"
 #include "2-3BTree.h"
 #include "Node.h"
+<<<<<<< HEAD
 #include "Assembly.h"
 #include "hash.h"
+=======
+
+>>>>>>> 277bb5263a45931fdd94e49741de1b4235154467
 
 using namespace std;
 
@@ -73,6 +81,7 @@ void rowsplit(const std::string& str, Array<string>& row, char delim = ',')
 //void displayAssemblyName(Assembly & anItem);
 //void displayAssemblyBday(Assembly & anItem);
 template<class T> void printOrders(CTree<T>* pTree);
+void displayPretty(Assembly & anItem);
 void displayAssembly(Assembly & anItem);
 int objectCount = 0;
 
@@ -456,7 +465,8 @@ int main()
 		//************************************************************//
 		case 6:
 		{
-			printOrders(&assemblyCTree);
+			//printOrders(&assemblyCTree);
+			assemblyTree.prettyPrint(displayPretty);
 			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
 			break;
 		}
@@ -521,6 +531,10 @@ int main()
 void displayAssembly(Assembly & anItem)
 {
 	cout << anItem << endl;
+}
+
+void displayPretty(Assembly & anItem) {
+	anItem.printItemKey();
 }
 
 template<class T>

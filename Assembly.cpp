@@ -196,7 +196,11 @@ bool Assembly::operator<(const Assembly& right)
 		break;
 	case GC:          // GC, UNKNOWN are float
 	case UNKNOWN:
+<<<<<<< HEAD
 		if (*(static_cast<float*>(pkey)) < *(static_cast<double*>(right.pkey)))
+=======
+		if (*(static_cast<double *>(pkey)) < *(static_cast<double *>(right.pkey)))
+>>>>>>> 277bb5263a45931fdd94e49741de1b4235154467
 			retval = true;
 		break;
 	default: // code to be executed if n doesn't match any cases
@@ -312,16 +316,44 @@ Assembly& Assembly::operator=(const Assembly& right)
 	return *this;
 }
 
-/*
 std::ostream& operator<<(std::ostream& strm, Assembly& obj)
+=======
+void Assembly::printItemKey()
 {
-	strm << obj.name << ", " << obj.type << ", " << obj.num_contigs << ", "
-		<< obj.size << ", " << obj.n50 << ", " << obj.gc << ", " << obj.unknown;
-	return strm;
-}
-*/
+	switch (keyType)
+	{
+	case NONE:
+		cout << "\nAssembly::printItemKey() : Cant happen, keytype is 'NONE'" << endl;
+		break;
+	case NAME:        // NAME and TYPE are strings
+	case TYPE:
+	{
+		string ourStrKey = *(static_cast<string *>(pkey));
+		cout << ourStrKey << "\n";
+		break;
+	}
+	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
+	case SIZE:
+	case N50:
+	{
+		int ourIntKey = *(static_cast<int *>(pkey));
+		cout << ourIntKey << "\n";
+		break;
+	}
+	case GC:          // GC, UNKNOWN are float
+	case UNKNOWN:
+	{
+		double ourDoubleKey = *(static_cast<double *>(pkey));
+		cout << ourDoubleKey << "\n";
+		break;
+	}
+	default: // code to be executed if n doesn't match any cases
+		cout << "Assembly::printItemKey() : Cant happen, keytype is BOGUS!" << endl;
+	}
 
-std::ostream& operator<<(std::ostream& strm, Assembly& obj)
+}
+
+std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 {
 	strm << obj.name << endl << obj.type << endl << obj.num_contigs << endl
 		<< obj.size << endl << obj.n50 << endl << obj.gc << endl << obj.unknown;
