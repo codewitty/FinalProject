@@ -72,15 +72,16 @@ void displayAssembly(Assembly & anItem);
 int objectCount = 0;
 
 BNTree<Assembly> assemblyTree;
+BNTree<Assembly> assemblyTreeName;
 LinkedList<Assembly> assemblyList;
 
 // Covering function for generic add.
-bool addItem(Assembly * anItem, assemblyAttribute keyType){
+bool addItem(Assembly * anItem){
 	// 1. Simple validation
 	// 2. Add to all 3 data structures
 
 	// TREE ADD CODE
-//	if (keyType == NAME)
+	assemblyTreeName.add(*anItem);
 	anItem->setOrdering(NUM_CONTIGS);
 	assemblyTree.add(*anItem);
 
@@ -97,10 +98,12 @@ bool addItem(Assembly * anItem, assemblyAttribute keyType){
 
 bool searchItem(Assembly searchGenome) {
 	bool retVal{false};
-	if (assemblyTree.contains(searchGenome)) {
+	if (assemblyTreeName.contains(searchGenome)) {
 		cout << "\nHere is the Data item found in the BST" << endl;
-		Assembly foundGenome = assemblyTree.find(searchGenome);
-		cout << foundGenome;
+		Assembly foundGenome = assemblyTreeName.find(searchGenome);
+		foundGenome.setOrdering(NUM_CONTIGS);
+		if (assemblyTree.contains(foundGenome))
+			cout << foundGenome;
 		cout << "\nHere is the Data item found in the Linked List" << endl;
 		foundGenome.setOrdering(N50);
 		Assembly listGenome = assemblyList.findItem(foundGenome);
@@ -111,14 +114,16 @@ bool searchItem(Assembly searchGenome) {
 }
 
 bool deleteItem(Assembly genome_to_delete){
+	genome_to_delete.setOrdering(NUM_CONTIGS);
 	bool retVal{false};
-	if (!assemblyTree.contains(genome_to_delete)) {
+	if (!assemblyTreeName.contains(genome_to_delete)) {
 		cout << "\n Data item not found" << endl;
 		retVal = false;
 	}
 	else {
 		// ==> foundAssemblyRecord found by name, get the record.
-		Assembly deleteGenome = assemblyTree.find(genome_to_delete);
+		Assembly deleteGenome = assemblyTreeName.find(genome_to_delete);
+		deleteGenome.setOrdering(NUM_CONTIGS);
 		cout << " We are deleting this genome" << endl;
 		cout << " " << deleteGenome;
 		assemblyTree.remove(deleteGenome);
@@ -228,7 +233,7 @@ int main()
 			assemblyByName[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, NAME);
 
 			//// Add to Linked List, Hash Table and BST
-			addItem(assemblyByName[count], NAME);
+			addItem(assemblyByName[count]);
 
 			count++;
 		}
@@ -250,8 +255,8 @@ int main()
 		cout << endl
 			 << "   What operation would you like to carry out?" << endl;
 		cout << "   1: Add a Genome Assembly" << endl;
-		cout << "   2: Search for a Genome Assembly by Name" << endl;
-		cout << "   3: Delete a Genome Assembly" << endl;
+		cout << "   2: Delete a Genome Assembly" << endl;
+		cout << "   3: Search for a Genome Assembly by Name" << endl;
 		cout << "   4: List Genome Assemblies in Hash Table Sequence" << endl;
 		cout << "   5: List Genome Assemblies in Sorted Key Sequence" << endl;
 		cout << "   6: Print indented Tree" << endl; 
@@ -329,10 +334,46 @@ int main()
 			}
 			break;
 		}
+
 		//************************************************************//
-		// case 2 SEARCHES for a user specified node.				  //
+		// case 2 DELETES a genome from both all data structures. 	  //
 		//************************************************************//
-		case 2: // Search for a particular Genome by Name 
+		case 2: // Delete a particular Node by Name
+		{
+			bool removingDataItems = true;
+			string r_name;
+
+			//Assembly * del3 = &AssemblyByName03;
+			//if (deleteItem(AssemblyByName03)) // DELETE entrypoint!
+			//	cout << "Deleting done" << endl;
+
+
+			 //loop allows you to keep deleting items to your hearts content...
+			while (removingDataItems) {
+				cout << " Enter the name of the Genome Assembly to be deleted.\n";
+				cout << " ";
+				getline(cin, r_name);
+				string tname = trim(r_name);
+				Assembly delete_genome(tname, "", 0, 0, 0, 0.0, 0.0, NAME);
+				// deleteItem is the entry point to delete the item from ALL data structures.
+				if (deleteItem(delete_genome)) // DELETE entrypoint!
+				{
+					cout << "Deleting done" << endl;
+				}
+				else 
+				{
+					cout << "Item not found or deleted." << endl;
+				}
+			// Set flag using exit function
+			removingDataItems = exitFunction();
+			}
+		break;
+		} // End switch
+
+		//************************************************************//
+		// case 3 SEARCHES for a user specified node.				  //
+		//************************************************************//
+		case 3: // Search for a particular Genome by Name 
 		{
 			bool sflag = true;
 			string name;
@@ -355,124 +396,79 @@ int main()
 		}
 
 		//************************************************************//
-		// case 3 DELETES a genome from both all data structures. 	  //
-		//************************************************************//
-		case 3: // Delete a particular Node by Name
-		{
-			bool removingDataItems = true;
-			string r_name;
-
-			//Assembly * del3 = &AssemblyByName03;
-			//if (deleteItem(AssemblyByName03)) // DELETE entrypoint!
-			//	cout << "Deleting done" << endl;
-
-
-			 //loop allows you to keep deleting items to your hearts content...
-			while (removingDataItems) {
-				cout << " Enter the name of the person item to be deleted.\n";
-				cout << " ";
-				getline(cin, r_name);
-				string tname = trim(r_name);
-				Assembly delete_genome(tname, "", 0, 0, 0, 0.0, 0.0, NAME);
-				// deleteItem is the entry point to delete the item from ALL data structures.
-				if (deleteItem(delete_genome)) // DELETE entrypoint!
-				{
-					cout << "Deleting done" << endl;
-				}
-				else 
-				{
-					cout << "Item not found or deleted." << endl;
-				}
-			// Set flag using exit function
-			removingDataItems = exitFunction();
-			}
-		break;
-		} // End switch
-
-		//************************************************************//
-		// case 4 PRINTS all node from both existing trees.			  //
-		// Name Tree is printed in Preorder and Postorder modes.	  //
-		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
+		// case 4 PRINTS data in hash table sequence 
 		//************************************************************//
 		case 4:
 		{
-			/*
-
-			nameOut << endl << "...!!!!...DISPLAYING NAME TREE...!!!!..." << endl;
-			nameOut << endl << endl << "Nametree in PREORDER" << endl;
-			nameOut << string(80, '=') << endl;
-			nameOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			nameOut << string(80, '=') << endl;
-			nameTree.preorderTraverse(displayAssemblyName);
-			nameOut << endl << endl << "Nametree in POSTORDER" << endl;
-			nameOut << string(80, '=') << endl;
-			nameOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			nameOut << string(80, '=') << endl;
-			nameTree.postorderTraverse(displayAssemblyName);
-			bdayOut << endl << endl << "...!!!!...DISPLAYING BIRTHDAY TREE...!!!!..." << endl;
-			bdayOut << endl << endl << "Birthday Tree in INORDER" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayTree.inorderTraverse(displayAssemblyBday);
-			bdayOut << endl << endl << "Birthday Tree in BREADTHFIRST ORDER" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayTree.breadthfirstTraverse(displayAssemblyBday);
-			*/
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~COL 5~~~~~" << endl;
-			assemblyList.print();
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY NUM CONTIGS~~~~~~~~COL 3~~~~~" << endl;
-			assemblyTree.inorderTraverse(displayAssembly);
-			//assemblyByN50.print();
+			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			break;
 		}
-		break;
 
 		//************************************************************//
-		// case 5 PRINTS all node from both existing trees and		  //
-		//		 exits the menu.									  //
-		// Name Tree is printed in Preorder and Postorder modes.	  //
-		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
+		// case 5 PRINTS data in sorted key sequence using 2 data	  // 
+		//	structures, Linked List and BST.						  //
+		// Linked List is printed by the N50 key.					  //
+		// BST is printed by the Num_Contigs key.					  //
 		//************************************************************//
 		case 5:
 		{
-			/*
-			nameOut << endl << "...!!!!...DISPLAYING NAME TREE...!!!!..." << endl;
-			nameOut << endl << endl << "Nametree in PREORDER" << endl;
-			nameOut << string(80, '=') << endl;
-			nameOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			nameOut << string(80, '=') << endl;
-			nameTree.preorderTraverse(displayAssemblyName);
-			nameOut << endl << endl << "Nametree in POSTORDER" << endl;
-			nameOut << string(80, '=') << endl;
-			nameOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			nameOut << string(80, '=') << endl;
-			nameTree.postorderTraverse(displayAssemblyName);
-			bdayOut << endl << endl << "...!!!!...DISPLAYING BIRTHDAY TREE...!!!!..." << endl;
-			bdayOut << endl << endl << "Birthday Tree in INORDER" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayTree.inorderTraverse(displayAssemblyBday);
-			bdayOut << endl << endl << "Birthday Tree in BREADTHFIRST ORDER" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayTree.breadthfirstTraverse(displayAssemblyBday);
-			cout << endl;
-			*/
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~COL 4~~~~~" << endl;
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~~~~~~" << endl;
+			cout << string(160, '=') << endl;
+			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(160, '=') << endl;
 			assemblyList.print();
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY Name~~~~~~~~COL 1~~~~~" << endl;
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY NUM CONTIGS~~~~~~~~~~~~~" << endl;
+			cout << string(160, '=') << endl;
+			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(160, '=') << endl;
 			assemblyTree.inorderTraverse(displayAssembly);
+			//assemblyByN50.print();
+		break;
+		}
+
+		//************************************************************//
+		// case 6 PRINTS the indented tree 
+		//************************************************************//
+		case 6:
+		{
+			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			break;
+		}
+
+		//************************************************************//
+		// case 7 PRINTS all efficiency statistics.					  //
+		//************************************************************//
+		case 7:
+		{
+			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			break;
+		}
+
+		//************************************************************//
+		// case 8 PRINTS all node from both existing trees.			  //
+		// Name Tree is printed in Preorder and Postorder modes.	  //
+		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
+		//************************************************************//
+		case 8:
+		{
+			cout << endl << endl << "~~~~~~~~~~~~Special Menu Option~~~~~~~~~~~~~" << endl;
+			break;
+		}
+
+		//************************************************************//
+		// case 9 Exits the menu and QUITS the program.				  //
+		//************************************************************//
+		case 9:
+		{
 			cout << endl << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl;
 			loop = false;
 			break;
 		} // End Case 6
 		default:
 			cout << "   Please enter a valid choice between"
-				<< "   1-5" << endl;
+				<< "   1-8" << endl;
 		} // End Switch for Menu
 	} // End While loop for Menu
 
@@ -489,17 +485,6 @@ int main()
 
 	return 0;
 }
-/*
-void displayAssemblyName(Assembly & anItem)
-{
-	nameOut << anItem << endl;
-}
-
-void displayAssemblyBday(Assembly & anItem)
-{
-	bdayOut << anItem << endl;
-}
-*/
 
 void displayAssembly(Assembly & anItem)
 {

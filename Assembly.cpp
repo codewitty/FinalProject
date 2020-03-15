@@ -317,7 +317,7 @@ std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 {
 	//strm << setw(70) << left << obj.name << ", " << setw(10) << obj.type << ", " << setw(10) << obj.num_contigs << ", "
 	//	<< setw(10) << obj.size << ", " << setw(10) << obj.n50 << ", " << setw(10) << obj.gc << ", " << setw(10) << obj.unknown;
-	strm << setw(100) << left << obj.name << setw(20) << obj.type << setw(10) << obj.num_contigs 
+	strm << setw(80) << left << obj.name << setw(20) << obj.type << setw(15) << obj.num_contigs 
 		<< setw(10) << obj.size << setw(10) << obj.n50 << setw(10) << obj.gc << setw(10) << obj.unknown;
 	return strm;
 }
