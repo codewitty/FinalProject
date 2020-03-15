@@ -40,6 +40,7 @@ public:
 	// clear the list
 	void clear();
 
+	T findItem(const T& target) const;
 	// Inserts an item into the list at position index
 	bool insert(const T& newItem);
 
@@ -110,6 +111,18 @@ inline Node<T>* LinkedList<T>::findItemNode(const T& target) const
 			currPtr = currPtr->getNext();
 	}
 	return currPtr;
+}
+
+//**********************************************************************//
+// This is a private utility member function used to find a target node // 
+// pre: User provides the item to be found.								//
+// post: N/A.															//
+// return: Returns the address of the target item node.					//
+//**********************************************************************// 
+template<typename T>
+inline T LinkedList<T>::findItem(const T& target) const
+{
+	return findItemNode(target)->getItem();
 }
 
 //**********************************************************************//
@@ -530,9 +543,8 @@ inline void LinkedList<T>::print()
 	while (index != nullptr) {
 		T anItem;
 		anItem = index->getItem();
-		cout << "Item [" << anItem << "]\n";
+		cout << anItem << endl;
 		index = index->getNext();
 	}
-	cout << "\nTotal Item Count : " << itemCount << "\n";
 	return;
 }

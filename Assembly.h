@@ -66,14 +66,14 @@ public:
 	// pre:  Person objects we want to compare.                             //
 	// return: result of comparing the operands (>)                         //
 	//**********************************************************************//
-	virtual bool operator < (const Assembly&);		// Overloaded >
+	virtual bool operator < (const Assembly&) const;		// Overloaded >
 
 	//**********************************************************************//
 	// Person operator >                                                    //
 	// pre:  Person objects we want to compare.                             //
 	// return: result of comparing the operands (>)                         //
 	//**********************************************************************//
-	virtual bool operator > (const Assembly&);		// Overloaded >
+	virtual bool operator > (const Assembly&) const;		// Overloaded >
 
 	// istream and ostream overloading as friends
 	//friend std::ostream& operator << (std::ostream& out, Assembly& right);
@@ -92,12 +92,7 @@ public:
 	//       operation on.                                                  //
 	// return: result of assign one operand the result of an RHS expression.//
 	//**********************************************************************//
-<<<<<<< HEAD
-	virtual Assembly& operator=(const Assembly&);  // overloaded =
-};
-=======
 	virtual Assembly& operator=(const Assembly &);  // overloaded =
 
 	void printItemKey();
 };
->>>>>>> 277bb5263a45931fdd94e49741de1b4235154467

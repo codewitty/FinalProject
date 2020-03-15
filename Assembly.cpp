@@ -1,5 +1,6 @@
-#include "Assembly.h"
 #include <string>
+#include <iomanip>
+#include "Assembly.h"
 
 Assembly::Assembly()
 {
@@ -164,7 +165,7 @@ void Assembly::setUnknown(float aGNomeAssemblyUnknown)
 	this->unknown = aGNomeAssemblyUnknown;
 }
 
-bool Assembly::operator<(const Assembly& right)
+bool Assembly::operator<(const Assembly& right) const
 {
 	// These are the Assembly member types we are processing.
 	// NONE,        (==> unassigned)
@@ -196,11 +197,6 @@ bool Assembly::operator<(const Assembly& right)
 		break;
 	case GC:          // GC, UNKNOWN are float
 	case UNKNOWN:
-<<<<<<< HEAD
-		if (*(static_cast<float*>(pkey)) < *(static_cast<double*>(right.pkey)))
-=======
-		if (*(static_cast<double *>(pkey)) < *(static_cast<double *>(right.pkey)))
->>>>>>> 277bb5263a45931fdd94e49741de1b4235154467
 			retval = true;
 		break;
 	default: // code to be executed if n doesn't match any cases
@@ -212,7 +208,7 @@ bool Assembly::operator<(const Assembly& right)
 	return retval;
 }
 
-bool Assembly::operator>(const Assembly& right)
+bool Assembly::operator>(const Assembly& right) const
 {
 	// These are the Assembly member types we are processing.
 	// NONE,        (==> unassigned)
@@ -316,8 +312,6 @@ Assembly& Assembly::operator=(const Assembly& right)
 	return *this;
 }
 
-std::ostream& operator<<(std::ostream& strm, Assembly& obj)
-=======
 void Assembly::printItemKey()
 {
 	switch (keyType)
@@ -355,7 +349,7 @@ void Assembly::printItemKey()
 
 std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 {
-	strm << obj.name << endl << obj.type << endl << obj.num_contigs << endl
-		<< obj.size << endl << obj.n50 << endl << obj.gc << endl << obj.unknown;
+	strm << setw(80) << left << obj.name << setw(20) << obj.type << setw(15) << obj.num_contigs
+		<< setw(10) << obj.size << setw(10) << obj.n50 << setw(10) << obj.gc << setw(10) << obj.unknown;
 	return strm;
 }

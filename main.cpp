@@ -4,23 +4,15 @@
 #include <iomanip>
 #include "ArrayTemplateClass.h"
 #include "HandyUtils.h"
-<<<<<<< HEAD
 #include "LinkedList.h"
-=======
 #include "Assembly.h"
->>>>>>> 277bb5263a45931fdd94e49741de1b4235154467
 #include "BSTNode.h"
 #include "BNTree.h"
 #include "2-3BTreeError.h"
 #include "2-3BTreeNode.h"
 #include "2-3BTree.h"
 #include "Node.h"
-<<<<<<< HEAD
-#include "Assembly.h"
 #include "hash.h"
-=======
-
->>>>>>> 277bb5263a45931fdd94e49741de1b4235154467
 
 using namespace std;
 
@@ -432,7 +424,7 @@ int main()
 			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
 				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
 			cout << string(160, '=') << endl;
-			table.print();
+			table.printTable();
 			break;
 		}
 
@@ -456,7 +448,6 @@ int main()
 				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
 			cout << string(160, '=') << endl;
 			assemblyTree.inorderTraverse(displayAssembly);
-			//assemblyByN50.print();
 		break;
 		}
 
