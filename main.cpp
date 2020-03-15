@@ -90,7 +90,7 @@ bool addItem(Assembly * anItem){
 	//anItem->setOrdering(NUM_CONTIGS);
 	//assemblyTree.add(anItem);
 	// 2-3 tree...
-	assemblyCTree.insert(anItem);
+	//assemblyCTree.insert(anItem);
 
 	// HASH ADD CODE tbd
 	// Ex. BdayHash.add(*name)
