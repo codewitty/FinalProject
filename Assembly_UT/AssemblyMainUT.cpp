@@ -23,19 +23,19 @@ int main()
 	Assembly AssemblyByName16("ERS248804.fasta.gz", "Spades", 2348, 2846495, 205, 0.3942, 0.5904, NAME);
 	Assembly AssemblyByName17("pilon.fasta.gz", "Spades", 914, 2677840, 88, 0.2821, 0.6297, NAME);
 
-	if (AssemblyByName05 > AssemblyByName01) {
+	if (&AssemblyByName05 > &AssemblyByName01) {
 		cout << "Assembly [" << AssemblyByName05 << "] is greater than " << endl;
 		cout << "assembly [" << AssemblyByName01 << "] (by NAME)." << endl;
 		cout << "Our (>) operator for assembly works." << endl;
 	}
 
-	if (AssemblyByName01 < AssemblyByName05) {
+	if (&AssemblyByName01 < &AssemblyByName05) {
 		cout << "Assembly [" << AssemblyByName01 << "] is lesser than " << endl;
 		cout << "assembly [" << AssemblyByName05 << "] (by NAME)." << endl;
 		cout << "Our (<) operator for assembly works." << endl;
 	}
 
-	if (AssemblyByName15 == AssemblyByName15) {
+	if (&AssemblyByName15 == &AssemblyByName15) {
 		cout << "Assembly [" << AssemblyByName15 << "] and " << endl;
 		cout << "assembly [" << AssemblyByName15 << "] are equal (by NAME)." << endl;
 		cout << "Our (==) operator for assembly works." << endl;

@@ -86,9 +86,9 @@ bool addItem(Assembly * anItem){
 	// 2. Add to all 3 data structures
 
 	// TREE ADD CODE
-	assemblyTreeName.add(*anItem);
-	anItem->setOrdering(NUM_CONTIGS);
-	assemblyTree.add(*anItem);
+	//assemblyTreeName.add(anItem);
+	//anItem->setOrdering(NUM_CONTIGS);
+	//assemblyTree.add(anItem);
 	// 2-3 tree...
 	assemblyCTree.insert(anItem);
 
@@ -97,8 +97,8 @@ bool addItem(Assembly * anItem){
 	
 	// LINKED LIST ADD CODE
 //	else if (keyType == N50)
-	anItem->setOrdering(N50);
-	assemblyList.insert(*anItem);
+//	anItem->setOrdering(N50);
+//	assemblyList.insert(*anItem);
 	// 3. Report results
 	return true;
 }

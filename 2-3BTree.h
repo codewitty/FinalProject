@@ -25,7 +25,7 @@
 #pragma once
 
 #include "2-3BTreeError.h"
-#include "2-3BtreeNode.h"
+#include "2-3BTreeNode.h"
 
  /* Three tree traversal methods supported. */
 enum eTreeTraversal
@@ -311,10 +311,8 @@ int CTree<T>::search(const T* const pKey,
 				eSearchDirection = leftChild;
 			}
 			/* If (search) key is larger than bigkey node, traverse to the right child. */
-			else if (pNodeIterator->getSize() == eNodeSize::threeNode &&
-				TCompare(pKey, pNodeIterator->getBigKey()) == GREATER ||
-				(pNodeIterator->getSize() == eNodeSize::twoNode &&
-					TCompare(pKey, pNodeIterator->getSmallKey()) == GREATER))
+			else if (((pNodeIterator->getSize() == eNodeSize::threeNode) && (TCompare(pKey, pNodeIterator->getBigKey())) == GREATER) || 
+					 ((pNodeIterator->getSize() == eNodeSize::twoNode)   && (TCompare(pKey, pNodeIterator->getSmallKey()) == GREATER)))
 			{
 				eSearchDirection = rightChild;
 			}
