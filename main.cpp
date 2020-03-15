@@ -4,6 +4,7 @@
 #include <iomanip>
 #include "ArrayTemplateClass.h"
 #include "HandyUtils.h"
+#include "Assembly.h"
 #include "BSTNode.h"
 #include "BNTree.h"
 #include "2-3BTreeError.h"
@@ -11,7 +12,7 @@
 #include "2-3BTree.h"
 #include "LinkedList.h"
 #include "Node.h"
-#include "Assembly.h"
+
 
 using namespace std;
 
@@ -72,6 +73,7 @@ void rowsplit(const std::string& str, Array<string>& row, char delim = ',')
 //void displayAssemblyName(Assembly & anItem);
 //void displayAssemblyBday(Assembly & anItem);
 template<class T> void printOrders(CTree<T>* pTree);
+void displayPretty(Assembly & anItem);
 void displayAssembly(Assembly & anItem);
 int objectCount = 0;
 
@@ -439,7 +441,8 @@ int main()
 		//************************************************************//
 		case 6:
 		{
-			printOrders(&assemblyCTree);
+			//printOrders(&assemblyCTree);
+			assemblyTree.prettyPrint(displayPretty);
 			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
 			break;
 		}
@@ -498,16 +501,16 @@ void displayAssembly(Assembly & anItem)
 	cout << anItem << endl;
 }
 
+void displayPretty(Assembly & anItem) {
+	anItem.printItemKey();
+}
+
 template<class T>
 void printOrders(CTree<T>* pTree)
 {
 	int iItemCnt = 0;
-	pTree->print(preorder, &iItemCnt);
-	std::cout << "**preorder[" << iItemCnt << "]" << std::endl << std::endl;
 	pTree->print(inorder, &iItemCnt);
 	std::cout << "**inorder[" << iItemCnt << "]" << std::endl << std::endl;
-	pTree->print(postorder, &iItemCnt);
-	std::cout << "**postorder[" << iItemCnt << "]" << std::endl << std::endl;
 }
 
 // EOF Lab05BST_main.cpp

@@ -33,11 +33,17 @@ protected:
 	// Copies the tree rooted at treePtr and returns a pointer to
 	// the copy.
 	BSTNode<T>* copyTree(const BSTNode<T>* treePtr) const;
+	//------------------------------------------------------------
 	// Recursive traversal helper methods:
+	//------------------------------------------------------------
 	void preorder(void visit(T&), BSTNode<T>* treePtr) const;
 	void inorder(void visit(T&), BSTNode<T>* treePtr) const;
 	void postorder(void visit(T&), BSTNode<T>* treePtr) const;
 	void breadthfirst(void visit(T&), BSTNode<T>* treePtr) const;
+	//------------------------------------------------------------
+	// Print indented tree...
+	//------------------------------------------------------------
+	void printindented(void visit(T&), BSTNode<T>* treePtr, int prePendThis) const;
 
 public:
 	//------------------------------------------------------------
@@ -53,7 +59,7 @@ public:
 	//------------------------------------------------------------
 	bool isEmpty() const;
 	int getHeight() const;
-	int getNumberOfNodes() const;
+	//int getNumberOfNodes() const;
 	bool add(const T& newData); // Adds a node
 	T find(T & recordByKey); // Finds a node
 	bool remove(const T& data); // Removes a node
@@ -65,6 +71,10 @@ public:
 	void inorderTraverse(void visit(T&)) const;
 	void postorderTraverse(void visit(T&)) const;
 	void breadthfirstTraverse(void visit(T&)) const;
+	//------------------------------------------------------------
+	// prettyPrint by key
+	//------------------------------------------------------------
+	void prettyPrint(void visit(T&));
 	//------------------------------------------------------------
 	// Overloaded Operator Section.
 	//------------------------------------------------------------
@@ -715,6 +725,40 @@ inline void BNTree<T>::breadthfirstTraverse(void visit(T&)) const
 	// here we call the helper function inorder to do the recursive
 	// in-order traversal.
 	breadthfirst(visit, root);
+}
+
+template<class T>
+inline void BNTree<T>::prettyPrint(void visit(T&))
+{
+	// for now just print, will likely evolve
+	printindented(visit, root, 0);
+}
+
+template<class T>
+inline void BNTree<T>::printindented(void visit(T&), BSTNode<T>* treePtr, int prePendThis) const
+{
+	int tabSize{ 12 };
+	// retreat if passed a nullptr tree pointer.
+	if (treePtr == nullptr)
+		return;
+
+	// inc. tab size in characters.  
+	prePendThis += tabSize;
+
+	// process right child first  
+	printindented(visit, treePtr->getRightPtr(), prePendThis);
+
+	// print current node after printing the layout tab
+	cout << endl;
+	for (int count = tabSize; count < prePendThis; count++)
+		cout << " ";
+
+	// execute the worker bee...
+	T item = treePtr->getItem();
+	visit(item);
+
+	// Process left child  
+	printindented(visit, treePtr->getLeftPtr(), prePendThis);
 }
 
 //**********************************************************************//

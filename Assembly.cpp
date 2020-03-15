@@ -197,7 +197,7 @@ bool Assembly::operator<(const Assembly &right) const
 		break;
 	case GC:          // GC, UNKNOWN are float
 	case UNKNOWN:
-		if (*(static_cast<float *>(pkey)) < *(static_cast<double *>(right.pkey)))
+		if (*(static_cast<double *>(pkey)) < *(static_cast<double *>(right.pkey)))
 			retval = true;
 		break;
 	default: // code to be executed if n doesn't match any cases
@@ -311,6 +311,41 @@ Assembly & Assembly::operator=(const Assembly &right)
 		this->keyType = right.keyType;
 	}
 	return *this;
+}
+
+void Assembly::printItemKey()
+{
+	switch (keyType)
+	{
+	case NONE:
+		cout << "\nAssembly::printItemKey() : Cant happen, keytype is 'NONE'" << endl;
+		break;
+	case NAME:        // NAME and TYPE are strings
+	case TYPE:
+	{
+		string ourStrKey = *(static_cast<string *>(pkey));
+		cout << ourStrKey << "\n";
+		break;
+	}
+	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
+	case SIZE:
+	case N50:
+	{
+		int ourIntKey = *(static_cast<int *>(pkey));
+		cout << ourIntKey << "\n";
+		break;
+	}
+	case GC:          // GC, UNKNOWN are float
+	case UNKNOWN:
+	{
+		double ourDoubleKey = *(static_cast<double *>(pkey));
+		cout << ourDoubleKey << "\n";
+		break;
+	}
+	default: // code to be executed if n doesn't match any cases
+		cout << "Assembly::printItemKey() : Cant happen, keytype is BOGUS!" << endl;
+	}
+
 }
 
 std::ostream & operator<<(std::ostream & strm, Assembly & obj)

@@ -93,4 +93,6 @@ public:
 	// return: result of assign one operand the result of an RHS expression.//
 	//**********************************************************************//
 	virtual Assembly& operator=(const Assembly &);  // overloaded =
+
+	void printItemKey();
 };
