@@ -541,7 +541,7 @@ inline void LinkedList<T>::print()
 	while (index != nullptr) {
 		T anItem;
 		anItem = index ->getItem();
-		cout << "Item [" << anItem << "]\n";
+		cout << anItem << endl;
 		index = index->getNext();
 	}
 	cout << "\nTotal Item Count : " << itemCount << "\n";

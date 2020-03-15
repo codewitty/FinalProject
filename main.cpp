@@ -67,45 +67,46 @@ void rowsplit(const std::string& str, Array<string>& row, char delim = ',')
 	}
 	row[ndx] = celltrim(str.substr(prev, curr - prev));
 }
+
 // Forward Declarations
-//void displayPersonName(Person & anItem);
-//void displayPersonBday(Person & anItem);
-void displayPerson(Assembly & anItem);
+//void displayAssemblyName(Assembly & anItem);
+//void displayAssemblyBday(Assembly & anItem);
+void displayAssembly(Assembly & anItem);
 int objectCount = 0;
 
 BNTree<Assembly> assemblyTree;
+BNTree<Assembly> assemblyTreeName;
 LinkedList<Assembly> assemblyList;
-/*
-Assembly AssemblyByName01("contig-20.fa", "pilon+idba", 2637, 2182179, 306, 0.1573, 0.1964, NAME);
-Assembly AssemblyByName02("contig-30.fa", "Spades", 2130, 1660411, 321, 0.5292, 0.3762, NAME);
-Assembly AssemblyByName03("contig-40.fa", "MosaicFLye", 2309, 2463148, 265, 0.8489, 0.759, NAME);
-*/
 
 // Covering function for generic add.
-bool addItem(Assembly * anItem, assemblyAttribute keyType){
+bool addItem(Assembly * anItem){
 	// 1. Simple validation
 	// 2. Add to all 3 data structures
 
 	// TREE ADD CODE
-	if (keyType == NAME)
-		assemblyTree.add(*anItem);
+	assemblyTreeName.add(*anItem);
+	anItem->setOrdering(NUM_CONTIGS);
+	assemblyTree.add(*anItem);
 
 	// HASH ADD CODE tbd
 	// Ex. BdayHash.add(*name)
-
+	
 	// LINKED LIST ADD CODE
-	else if (keyType == N50)
-		assemblyList.insert(*anItem);
+//	else if (keyType == N50)
+	anItem->setOrdering(N50);
+	assemblyList.insert(*anItem);
 	// 3. Report results
 	return true;
 }
 
 bool searchItem(Assembly searchGenome) {
 	bool retVal{false};
-	if (assemblyTree.contains(searchGenome)) {
+	if (assemblyTreeName.contains(searchGenome)) {
 		cout << "\nHere is the Data item found in the BST" << endl;
-		Assembly foundGenome = assemblyTree.find(searchGenome);
-		cout << foundGenome;
+		Assembly foundGenome = assemblyTreeName.find(searchGenome);
+		foundGenome.setOrdering(NUM_CONTIGS);
+		if (assemblyTree.contains(foundGenome))
+			cout << foundGenome;
 		cout << "\nHere is the Data item found in the Linked List" << endl;
 		foundGenome.setOrdering(N50);
 		Assembly listGenome = assemblyList.findItem(foundGenome);
@@ -117,13 +118,14 @@ bool searchItem(Assembly searchGenome) {
 
 bool deleteItem(Assembly genome_to_delete){
 	bool retVal{false};
-	if (!assemblyTree.contains(genome_to_delete)) {
+	if (!assemblyTreeName.contains(genome_to_delete)) {
 		cout << "\n Data item not found" << endl;
 		retVal = false;
 	}
 	else {
-		// ==> foundPersonRecord found by name, get the record.
-		Assembly deleteGenome = assemblyTree.find(genome_to_delete);
+		// ==> foundAssemblyRecord found by name, get the record.
+		Assembly deleteGenome = assemblyTreeName.find(genome_to_delete);
+		deleteGenome.setOrdering(NUM_CONTIGS);
 		cout << " We are deleting this genome" << endl;
 		cout << " " << deleteGenome;
 		assemblyTree.remove(deleteGenome);
@@ -131,6 +133,7 @@ bool deleteItem(Assembly genome_to_delete){
 		deleteGenome.setOrdering(N50);
 		Assembly listDeleteGenome = assemblyList.findItem(deleteGenome);
 		cout << listDeleteGenome;
+		assemblyList.remove(listDeleteGenome);
 		cout << "\nGenome removed from the Linked List" << endl;
 		retVal = true;
 		}
@@ -138,16 +141,15 @@ bool deleteItem(Assembly genome_to_delete){
 	// HASH DELETE CODE tbd
 	// Ex. BdayHash.delete(*name)
 
-	// MRU LINKED LIST DELETE CODE tbd
 
-	// 3. Report results
 	*/
+	// 3. Report results
 	return retVal;
 }
 
 
 //****************************************************************************
-// int main() - Main is our menu driven system for BST Tree based Person DB.
+// int main() - Main is our menu driven system for BST Tree based Assembly DB.
 //				Our DB has a record type that allows you to sort record types
 //				based on a persons name or birthday.
 //				
@@ -176,13 +178,7 @@ int main()
 	const int PERCENT_UNKNOWN{ 6 };
 
 	const int       MAX_ASSEMBLIES = 500;              // Maximum persons in our database
-	Array<Assembly *> assemblyByName(MAX_ASSEMBLIES);		// An array of type 'Person' using Array Template
-	Array<Assembly *> assemblyByContigs(MAX_ASSEMBLIES);		// An array of type 'Person' using Array Template
-	Array<Assembly *> assemblyByN50(MAX_ASSEMBLIES);
-	Array<Assembly *> assemblyBySize(MAX_ASSEMBLIES);
-	const int       MAX_PERSONS = 500;              // Maximum persons in our database
-	//Array<Person *> aPersonByName(MAX_PERSONS);		// An array of type 'Person' using Array Template
-//	Array<Person *> aPersonByBday(MAX_PERSONS);		// An array of type 'Person' using Array Template
+	Array<Assembly *> assemblyByName(MAX_ASSEMBLIES);		// An array of type 'Assembly' using Array Template
 
 	//   Print Header
 	cout << "\n\nFinal Project\n"
@@ -193,7 +189,6 @@ int main()
 	// Working Variables for Menu Processing
 	int choice = 0;
 	bool loop = true;
-	string name;
 
 	std::string csvLine{ "" };
 	int         number_of_lines{ 0 };
@@ -202,7 +197,7 @@ int main()
 	ifstream inFile("faux_assemblies.csv");
 	SkipBOM(inFile);
 
-	// This if block creates Person objects and seeds them into the array.
+	// This if block creates Assembly objects and seeds them into the array.
 	if (inFile) {
 		cin.clear();
 		while (getline(inFile, csvLine)) {
@@ -220,7 +215,7 @@ int main()
 				count++;
 			}
 
-			const int GNomeCSVCols = 7;              // Maximum persons in our database
+			const int GNomeCSVCols = 7;     // Maximum data fields in our database
 
 			Array<string> aRow(GNomeCSVCols);
 			// Get the name and birthday...
@@ -239,15 +234,9 @@ int main()
 			double aPercentUnknown(stod(aRow[PERCENT_UNKNOWN]));
 
 			assemblyByName[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, NAME);
-			assemblyByContigs[count] = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, NUM_CONTIGS);
-			assemblyByN50[count]     = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, N50);
-			assemblyBySize[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, SIZE);
 
 			//// Add to Linked List, Hash Table and BST
-			addItem(assemblyByName[count], NAME);
-			addItem(assemblyByContigs[count], NUM_CONTIGS);
-			addItem(assemblyByN50[count], N50);
-			addItem(assemblyBySize[count], SIZE);
+			addItem(assemblyByName[count]);
 
 			count++;
 		}
@@ -260,7 +249,7 @@ int main()
 
 	//**********************************************************************//
 	// Main menu Loop.														//
-	// pre: Successfully seeded Binary Trees.								//
+	// pre: Successfully seeded all data structures.						//
 	// post: Updated Database per User Request.								// 
 	//**********************************************************************//
 	while (loop)
@@ -268,11 +257,15 @@ int main()
 		// Output User Menu
 		cout << endl
 			 << "   What operation would you like to carry out?" << endl;
-		cout << "   1: Add a Node item" << endl;
-		cout << "   2: Search for a Genome" << endl;
-		cout << "   3: Delete a Genome" << endl;
-		cout << "   4: Print data" << endl;
-		cout << "   5: EXIT" << endl << endl;
+		cout << "   1: Add a Genome Assembly" << endl;
+		cout << "   2: Delete a Genome Assembly" << endl;
+		cout << "   3: Search for a Genome Assembly by Name" << endl;
+		cout << "   4: List Genome Assemblies in Hash Table Sequence" << endl;
+		cout << "   5: List Genome Assemblies in Sorted Key Sequence" << endl;
+		cout << "   6: Print indented Tree" << endl; 
+		cout << "   7: Display Efficiency Statistics" << endl; 
+		cout << "   8: Display Genome Assemblies in 2-3 Binary Tree Format" << endl; 
+		cout << "   9: EXIT" << endl << endl;
 		cout << "   Your Choice: ";
 		// User response recorded
 		cin >> choice;
@@ -288,46 +281,102 @@ int main()
 		case 1: // Add a Node to both Trees 
 		{
 			bool flag = true;
-			string new_name;
-			string new_bday;
+			string new_genome;
+			string Name;
+			string Method;
+			int    NumContigs;
+			int    SizeBases;
+			int    N50kbp;
+			double GCContent;
+			double PercentUnknown;
 			while (flag) {
-				cout << " Enter the name data item for the new node.\n" << " ";
-
+				cout << " Enter the name for the new Genome. " << endl;
+				getline(cin, new_genome);
+				string Name = trim(new_genome);
+				cout << " Enter the method for the new Genome. " << endl;
+				getline(cin, new_genome);
+				string aMethod = trim(new_genome);
+				cout << " Enter the number of contigs for the new Genome. " << endl;
+				cin >> NumContigs;
+				cout << " \nEnter the size of bases for the new Genome. " << endl;
+				cin >> SizeBases;
+				cout << " \nEnter the N50 for the new Genome. " << endl;
+				cin >> N50kbp;
+				cout << " \nEnter the GC Content for the new Genome. " << endl;
+				cin >> GCContent;
+				cout << " \nEnter the percent unknown for the new Genome. " << endl;
+				cin >> PercentUnknown;
 				/*
+					 < " A genome assembly consists of the following data items "
+					 << " A name, a type, the number of contigs( whole number only), 
+					 << " size( whole number only), N50 (whole number only), "
+					 << " gc, number of unknown). "
+					 << "\n  Please enter all data in one line separated by spaces."
+					 << endl;
 				Assembly * temp1 = &AssemblyByName01;
 				Assembly * temp2 = &AssemblyByName02;
 				Assembly * temp3 = &AssemblyByName03;
 				addItem(temp1);
 				addItem(temp2);
 				addItem(temp3);
-				getline(cin, new_name);
-				cout << " Enter the birthday data item for the new node. "
-					<< "Format is yyy-mm-dd.\n";
-				getline(cin, new_bday);
-				// Normalize the name and birthday...
-				string tname = trim(new_name);
-				string tbday = trim(new_bday);
+				
 				// dynamicallyy allocate & assign to array to keep track of memory
-				Person * personByName = new Person(tname, tbday, NAME); 
-				Person * personByBday = new Person(tname, tbday, BDAY); 
+				Assembly * personByName = new Assembly(tname, tbday, NAME); 
+				Assembly * personByBday = new Assembly(tname, tbday, BDAY); 
 				// Add to all data structures, BST, Hash Table, Linked List.
 				addItem(personByName, personByBday);
 				// save for later deallocation
-				aPersonByName[objectCount] = personByName;
-				aPersonByBday[objectCount] = personByBday; 
+				aAssemblyByName[objectCount] = personByName;
+				aAssemblyByBday[objectCount] = personByBday; 
 				// inc object count...
 				objectCount += 1;
-				*/
 
+				*/
 				// Set flag using exit function
 				flag = exitFunction();
 			}
 			break;
 		}
+
 		//************************************************************//
-		// case 2 SEARCHES for a user specified node.				  //
+		// case 2 DELETES a genome from both all data structures. 	  //
 		//************************************************************//
-		case 2: // Search for a particular Genome by Name 
+		case 2: // Delete a particular Node by Name
+		{
+			bool removingDataItems = true;
+			string r_name;
+
+			//Assembly * del3 = &AssemblyByName03;
+			//if (deleteItem(AssemblyByName03)) // DELETE entrypoint!
+			//	cout << "Deleting done" << endl;
+
+
+			 //loop allows you to keep deleting items to your hearts content...
+			while (removingDataItems) {
+				cout << " Enter the name of the Genome Assembly to be deleted.\n";
+				cout << " ";
+				getline(cin, r_name);
+				string tname = trim(r_name);
+				Assembly delete_genome(tname, "", 0, 0, 0, 0.0, 0.0, NAME);
+				// deleteItem is the entry point to delete the item from ALL data structures.
+				if (deleteItem(delete_genome)) // DELETE entrypoint!
+				{
+					cout << "Deleting done" << endl;
+				}
+				else 
+				{
+					cout << "Item not found or deleted." << endl;
+				}
+			// Set flag using exit function
+			removingDataItems = exitFunction();
+			}
+		break;
+		} // End switch
+
+		//************************************************************//
+		// case 3 SEARCHES for a user specified node.				  //
+		//************************************************************//
+		case 3: // Search for a particular Genome by Name 
 		{
 			bool sflag = true;
 			string name;
@@ -350,151 +399,97 @@ int main()
 		}
 
 		//************************************************************//
-		// case 3 DELETES a genome from both all data structures. 	  //
-		//************************************************************//
-		case 3: // Delete a particular Node by Name
-		{
-			bool removingDataItems = true;
-			string r_name;
-
-			//Assembly * del3 = &AssemblyByName03;
-			//if (deleteItem(AssemblyByName03)) // DELETE entrypoint!
-			//	cout << "Deleting done" << endl;
-
-
-			 //loop allows you to keep deleting items to your hearts content...
-			while (removingDataItems) {
-				cout << " Enter the name of the person item to be deleted.\n";
-				cout << " ";
-				getline(cin, r_name);
-				string tname = trim(r_name);
-				Assembly delete_genome(tname, "", 0, 0, 0, 0.0, 0.0, NAME);
-				// deleteItem is the entry point to delete the item from ALL data structures.
-				if (deleteItem(delete_genome)) // DELETE entrypoint!
-				{
-					cout << "Deleting done" << endl;
-				}
-				else 
-				{
-					cout << "Item not found or deleted." << endl;
-				}
-			// Set flag using exit function
-			removingDataItems = exitFunction();
-			}
-		break;
-		} // End switch
-
-		//************************************************************//
-		// case 4 PRINTS all node from both existing trees.			  //
-		// Name Tree is printed in Preorder and Postorder modes.	  //
-		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
+		// case 4 PRINTS data in hash table sequence 
 		//************************************************************//
 		case 4:
 		{
-			/*
-
-			nameOut << endl << "...!!!!...DISPLAYING NAME TREE...!!!!..." << endl;
-			nameOut << endl << endl << "Nametree in PREORDER" << endl;
-			nameOut << string(80, '=') << endl;
-			nameOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			nameOut << string(80, '=') << endl;
-			nameTree.preorderTraverse(displayPersonName);
-			nameOut << endl << endl << "Nametree in POSTORDER" << endl;
-			nameOut << string(80, '=') << endl;
-			nameOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			nameOut << string(80, '=') << endl;
-			nameTree.postorderTraverse(displayPersonName);
-			bdayOut << endl << endl << "...!!!!...DISPLAYING BIRTHDAY TREE...!!!!..." << endl;
-			bdayOut << endl << endl << "Birthday Tree in INORDER" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayTree.inorderTraverse(displayPersonBday);
-			bdayOut << endl << endl << "Birthday Tree in BREADTHFIRST ORDER" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayTree.breadthfirstTraverse(displayPersonBday);
-			*/
-			assemblyList.print();
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~COL 4~~~~~" << endl;
-			//assemblyByN50.print();
+			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			break;
 		}
-		break;
 
 		//************************************************************//
-		// case 5 PRINTS all node from both existing trees and		  //
-		//		 exits the menu.									  //
-		// Name Tree is printed in Preorder and Postorder modes.	  //
-		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
+		// case 5 PRINTS data in sorted key sequence using 2 data	  // 
+		//	structures, Linked List and BST.						  //
+		// Linked List is printed by the N50 key.					  //
+		// BST is printed by the Num_Contigs key.					  //
 		//************************************************************//
 		case 5:
 		{
-			/*
-			nameOut << endl << "...!!!!...DISPLAYING NAME TREE...!!!!..." << endl;
-			nameOut << endl << endl << "Nametree in PREORDER" << endl;
-			nameOut << string(80, '=') << endl;
-			nameOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			nameOut << string(80, '=') << endl;
-			nameTree.preorderTraverse(displayPersonName);
-			nameOut << endl << endl << "Nametree in POSTORDER" << endl;
-			nameOut << string(80, '=') << endl;
-			nameOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			nameOut << string(80, '=') << endl;
-			nameTree.postorderTraverse(displayPersonName);
-			bdayOut << endl << endl << "...!!!!...DISPLAYING BIRTHDAY TREE...!!!!..." << endl;
-			bdayOut << endl << endl << "Birthday Tree in INORDER" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayTree.inorderTraverse(displayPersonBday);
-			bdayOut << endl << endl << "Birthday Tree in BREADTHFIRST ORDER" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayOut << left << setw(60) << "NAME" << right << setw(20) << "BIRTHDAY" << endl;
-			bdayOut << string(80, '=') << endl;
-			bdayTree.breadthfirstTraverse(displayPersonBday);
-			cout << endl;
-			*/
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~COL 4~~~~~" << endl;
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~~~~~~" << endl;
+			cout << string(160, '=') << endl;
+			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(160, '=') << endl;
 			assemblyList.print();
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY Name~~~~~~~~COL 1~~~~~" << endl;
-			assemblyTree.inorderTraverse(displayPerson);
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY NUM CONTIGS~~~~~~~~~~~~~" << endl;
+			cout << string(160, '=') << endl;
+			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(160, '=') << endl;
+			assemblyTree.inorderTraverse(displayAssembly);
+			//assemblyByN50.print();
+		break;
+		}
+
+		//************************************************************//
+		// case 6 PRINTS the indented tree 
+		//************************************************************//
+		case 6:
+		{
+			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			break;
+		}
+
+		//************************************************************//
+		// case 7 PRINTS all efficiency statistics.					  //
+		//************************************************************//
+		case 7:
+		{
+			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			break;
+		}
+
+		//************************************************************//
+		// case 8 PRINTS all node from both existing trees.			  //
+		// Name Tree is printed in Preorder and Postorder modes.	  //
+		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
+		//************************************************************//
+		case 8:
+		{
+			cout << endl << endl << "~~~~~~~~~~~~Special Menu Option~~~~~~~~~~~~~" << endl;
+			break;
+		}
+
+		//************************************************************//
+		// case 9 Exits the menu and QUITS the program.				  //
+		//************************************************************//
+		case 9:
+		{
 			cout << endl << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl;
 			loop = false;
 			break;
 		} // End Case 6
 		default:
 			cout << "   Please enter a valid choice between"
-				<< "   1-5" << endl;
+				<< "   1-8" << endl;
 		} // End Switch for Menu
 	} // End While loop for Menu
 
 	// size variable is same for both arrays because of parallel arrays.
-	//int personCount = aPersonByName.GetLength();
+	//int personCount = aAssemblyByName.GetLength();
 
-	// Clean up allocated memory for Person Objects.
+	// Clean up allocated memory for Assembly Objects.
 	/*
 	for (int index = 0; index < objectCount; ++index) {
-		delete aPersonByName[index];
-		delete aPersonByBday[index];
+		delete aAssemblyByName[index];
+		delete aAssemblyByBday[index];
 	}
 	*/
 
 	return 0;
 }
-/*
-void displayPersonName(Person & anItem)
-{
-	nameOut << anItem << endl;
-}
 
-void displayPersonBday(Person & anItem)
-{
-	bdayOut << anItem << endl;
-}
-*/
-
-void displayPerson(Assembly & anItem)
+void displayAssembly(Assembly & anItem)
 {
 	cout << anItem << endl;
 }
