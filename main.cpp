@@ -128,6 +128,7 @@ bool deleteItem(Assembly genome_to_delete){
 	else {
 		// ==> foundAssemblyRecord found by name, get the record.
 		Assembly deleteGenome = assemblyTreeName.find(genome_to_delete);
+		assemblyTreeName.remove(deleteGenome);
 		deleteGenome.setOrdering(NUM_CONTIGS);
 		cout << " We are deleting this genome" << endl;
 		cout << " " << deleteGenome;
