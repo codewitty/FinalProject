@@ -71,12 +71,14 @@ void rowsplit(const std::string& str, Array<string>& row, char delim = ',')
 // Forward Declarations
 //void displayAssemblyName(Assembly & anItem);
 //void displayAssemblyBday(Assembly & anItem);
+template<class T> void printOrders(CTree<T>* pTree);
 void displayAssembly(Assembly & anItem);
 int objectCount = 0;
 
 BNTree<Assembly> assemblyTree;
 BNTree<Assembly> assemblyTreeName;
 LinkedList<Assembly> assemblyList;
+CTree<Assembly> assemblyCTree;
 
 // Covering function for generic add.
 bool addItem(Assembly * anItem){
@@ -87,6 +89,8 @@ bool addItem(Assembly * anItem){
 	assemblyTreeName.add(*anItem);
 	anItem->setOrdering(NUM_CONTIGS);
 	assemblyTree.add(*anItem);
+	// 2-3 tree...
+	assemblyCTree.insert(anItem);
 
 	// HASH ADD CODE tbd
 	// Ex. BdayHash.add(*name)
@@ -436,6 +440,7 @@ int main()
 		//************************************************************//
 		case 6:
 		{
+			printOrders(&assemblyCTree);
 			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
 			break;
 		}
@@ -492,6 +497,18 @@ int main()
 void displayAssembly(Assembly & anItem)
 {
 	cout << anItem << endl;
+}
+
+template<class T>
+void printOrders(CTree<T>* pTree)
+{
+	int iItemCnt = 0;
+	pTree->print(preorder, &iItemCnt);
+	std::cout << "**preorder[" << iItemCnt << "]" << std::endl << std::endl;
+	pTree->print(inorder, &iItemCnt);
+	std::cout << "**inorder[" << iItemCnt << "]" << std::endl << std::endl;
+	pTree->print(postorder, &iItemCnt);
+	std::cout << "**postorder[" << iItemCnt << "]" << std::endl << std::endl;
 }
 
 // EOF Lab05BST_main.cpp

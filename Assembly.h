@@ -66,7 +66,7 @@ public:
 	// pre:  Person objects we want to compare.                             //
 	// return: result of comparing the operands (>)                         //
 	//**********************************************************************//
-	virtual bool operator < (const Assembly &);		// Overloaded >
+	virtual bool operator < (const Assembly &) const;		// Overloaded >
 
 	//**********************************************************************//
 	// Person operator >                                                    //

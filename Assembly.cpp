@@ -165,7 +165,7 @@ void Assembly::setUnknown(float aGNomeAssemblyUnknown)
 	this->unknown = aGNomeAssemblyUnknown;
 }
 
-bool Assembly::operator<(const Assembly &right)
+bool Assembly::operator<(const Assembly &right) const
 {
 	// These are the Assembly member types we are processing.
 	// NONE,        (==> unassigned)
