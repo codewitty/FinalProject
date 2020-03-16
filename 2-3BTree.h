@@ -1050,31 +1050,29 @@ int CTree<T>::print(eTreeTraversal eTraversalMethod, int *pNrOfItemsPrinted) con
 template<class T>
 inline void CTree<T>::indentedPrint(CNode<T>* pNode, int indent)
 {
-		if (node is a leaf) {
+//		if (node is a leaf) {
+//
+//			/* Here print node's value/values */
+//
+//		}
+//		else if (node has 2 children) {
+//
+//			indentedPrint(node.leftChild);
+//			/* Here print node's value */
+//			indentedPrint(node.rightChild);
+//
+//		}
+//		else if (node has 3 children) {
+//
+//			indentedPrint(node.leftChild);
+//		/* Here print node's left value */
+//		indentedPrint(node.middleChild);
+//		/* Here print node's right value */
+//		recursiveindentedPrintPrint(node.rightChild)
 
-			/* Here print node's value/values */
-
-		}
-		else if (node has 2 children) {
-
-			indentedPrint(node.leftChild);
-			/* Here print node's value */
-			indentedPrint(node.rightChild);
-
-		}
-		else if (node has 3 children) {
-
-			indentedPrint(node.leftChild);
-		/* Here print node's left value */
-		indentedPrint(node.middleChild);
-		/* Here print node's right value */
-		recursiveindentedPrintPrint(node.rightChild)
-
-	}
+//	}
 
 	/* Shouldn't be other cases in 2-3 trees */
-}
-
 }
 
 /** @brief        Member function taking two arguments and returning address of next inorder node.
