@@ -526,15 +526,12 @@ int main()
 	} // End While loop for Menu
 
 	// size variable is same for both arrays because of parallel arrays.
-	//int personCount = aAssemblyByName.GetLength();
+	int assemblyCount = assemblyByName.GetLength();
 
 	// Clean up allocated memory for Assembly Objects.
-	/*
 	for (int index = 0; index < objectCount; ++index) {
-		delete aAssemblyByName[index];
-		delete aAssemblyByBday[index];
+		delete assemblyByName[index];
 	}
-	*/
 
 	return 0;
 }
