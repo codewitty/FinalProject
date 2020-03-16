@@ -30,6 +30,8 @@ int main() {
 	
 	table.getLength();
 
+	table.search(AssemblyByName02);
+
 	table.printTable();
 	table.remove(AssemblyByName02);
 	cout << "After removing: " << endl << endl << endl;

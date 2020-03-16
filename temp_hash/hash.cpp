@@ -65,16 +65,19 @@ void HashTable::printObj(Assembly assemblyObj)
 	table[index].print();
 }
 
-void HashTable::search(Assembly assemblyObj)
+bool HashTable::search(Assembly assemblyObj)
 {
+	bool retVal = false;
 	int index = hashFunc(assemblyObj.getName());
 	if (table[index].find(assemblyObj)) {
-		cout << "Item exist!" << endl;
+		cout << "Item exists!" << endl;
 		printObj(assemblyObj);
+		retVal = true;
 	}
 	else {
 		cout << "Item does not exist!" << endl;
 	}
+	return retVal;
 }
 
 void HashTable::getLength()

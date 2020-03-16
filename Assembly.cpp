@@ -349,7 +349,14 @@ void Assembly::printItemKey()
 
 std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 {
-	strm << setw(80) << left << obj.name << setw(20) << obj.type << setw(15) << obj.num_contigs
+	strm << setw(30) << left << obj.name << setw(20) << obj.type << setw(15) << obj.num_contigs
+		<< setw(10) << obj.size << setw(10) << obj.n50 << setw(10) << obj.gc << setw(10) << obj.unknown;
+	return strm;
+}
+// Const version
+std::ostream & operator<<(std::ostream & strm, const Assembly & obj)
+{
+	strm << setw(30) << left << obj.name << setw(20) << obj.type << setw(15) << obj.num_contigs
 		<< setw(10) << obj.size << setw(10) << obj.n50 << setw(10) << obj.gc << setw(10) << obj.unknown;
 	return strm;
 }

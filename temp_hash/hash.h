@@ -23,7 +23,7 @@ public:
 	void printTable();
 	void clear();
 	void printObj(Assembly assemblyObj); //prints one obj info
-	void search(Assembly assemblyObj);
+	bool search(Assembly assemblyObj);
 	void getLength();
 	// still need search and other basic functions
 };

@@ -42,7 +42,7 @@ public:
 	CTree(void);
 	~CTree(void);
 	int insert(const T* const pKey);
-	const T* const find(const T* const);
+	const T* const find(T* const);
 	int deleteItem(const T* const pKey);
 	int print(eTreeTraversal eTraversalMethod, int *pNrOfItemsPrinted) const;
 	int removeAll(void);
@@ -245,7 +245,7 @@ int CTree<T>::insert(const T* const pKey)
  *  @return    address of key object, 0 if key object can not be found in tree.
  */
 template<class T>
-const T* const CTree<T>::find(const T* const pKey)
+const T* const CTree<T>::find(T* const pKey)
 {
 	CNode<T> *pNodeFound = 0;
 	bool bKeyFound = false;

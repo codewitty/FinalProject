@@ -79,6 +79,8 @@ public:
 	//friend std::ostream& operator << (std::ostream& out, Assembly& right);
 	friend std::ostream& operator << (std::ostream& out, Assembly& right);
 
+	friend std::ostream& operator << (std::ostream& out, const Assembly& right);
+
 	//**********************************************************************//
 	// Person operator ==                                                   //
 	// pre:  Person objects we want to compare.                             //

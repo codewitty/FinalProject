@@ -78,8 +78,8 @@ void displayAssembly(Assembly & anItem);
 int objectCount = 0;
 
 BNTree<Assembly> assemblyTree;
-BNTree<Assembly> assemblyTreeName;
-LinkedList<Assembly> assemblyList;
+//BNTree<Assembly> assemblyTreeName;
+LinkedList<Assembly> assemblyList(DESCENDING);
 CTree<Assembly> assemblyCTree;
 HashTable table;
 
@@ -92,10 +92,11 @@ bool addItem(Assembly * anItem){
 	table.add(*anItem);
 
 	// TREE ADD CODE
-	assemblyTreeName.add(*anItem);
-	anItem->setOrdering(NUM_CONTIGS);
+//	assemblyTreeName.add(*anItem);
+	anItem->setOrdering(SIZE);
 	assemblyTree.add(*anItem);
 	// 2-3 tree...
+	anItem->setOrdering(NUM_CONTIGS);
 	assemblyCTree.insert(anItem);
 
 
@@ -109,16 +110,26 @@ bool addItem(Assembly * anItem){
 
 bool searchItem(Assembly searchGenome) {
 	bool retVal{false};
-	if (assemblyTreeName.contains(searchGenome)) {
+	if (table.search(searchGenome)){
+		Assembly foundGenome = table.getObject(searchGenome);
+		cout << "\nHere is the Data item found in the Hash Table" << endl;
+		table.printObj(foundGenome);
+		cout << endl;
 		cout << "\nHere is the Data item found in the BST" << endl;
-		Assembly foundGenome = assemblyTreeName.find(searchGenome);
-		foundGenome.setOrdering(NUM_CONTIGS);
-		if (assemblyTree.contains(foundGenome))
-			cout << foundGenome;
+		// Change key for BST
+		foundGenome.setOrdering(SIZE);
+		Assembly treeGenome = assemblyTree.find(foundGenome);
+		cout << treeGenome << endl;
 		cout << "\nHere is the Data item found in the Linked List" << endl;
+		// Change key for Linked List
 		foundGenome.setOrdering(N50);
 		Assembly listGenome = assemblyList.findItem(foundGenome);
 		cout << listGenome;
+		cout << "\nHere is the Data item found in the 2-3 Tree" << endl;
+		// Change key for 2-3 Tree
+		foundGenome.setOrdering(NUM_CONTIGS);
+		const Assembly * cTreeGenome = assemblyCTree.find(&foundGenome);
+		cout << *cTreeGenome << endl;
 		retVal = true;
 	}
 	return retVal;
@@ -126,18 +137,29 @@ bool searchItem(Assembly searchGenome) {
 
 bool deleteItem(Assembly genome_to_delete){
 	bool retVal{false};
-	if (!assemblyTreeName.contains(genome_to_delete)) {
+	if (!table.search(genome_to_delete)) {
 		cout << "\n Data item not found" << endl;
 		retVal = false;
 	}
 	else {
 		// ==> foundAssemblyRecord found by name, get the record.
-		Assembly deleteGenome = assemblyTreeName.find(genome_to_delete);
-		assemblyTreeName.remove(deleteGenome);
-		deleteGenome.setOrdering(NUM_CONTIGS);
+		Assembly deleteGenome = table.getObject(genome_to_delete);
+		//assemblyTreeName.remove(deleteGenome);
 		cout << " We are deleting this genome" << endl;
-		cout << " " << deleteGenome;
+		table.printObj(deleteGenome);
+		table.remove(deleteGenome);
+		// Remove from BST
+		deleteGenome.setOrdering(SIZE);
+		cout << "\nHere is the Data item to be removed from the BST" << endl;
+		Assembly dTreeGenome = assemblyTree.find(deleteGenome);
+		cout << dTreeGenome << endl;
 		assemblyTree.remove(deleteGenome);
+		// Remove from 2-3 Tree 
+		deleteGenome.setOrdering(NUM_CONTIGS);
+		cout << "\nHere is the Data item to be removed from the 2-3 Tree" << endl;
+		const Assembly * dcTreeGenome = assemblyCTree.find(&deleteGenome);
+		cout << *dcTreeGenome << endl;
+		assemblyCTree.deleteItem(&deleteGenome);
 		cout << "\nHere is the Data item to be removed from the Linked List" << endl;
 		deleteGenome.setOrdering(N50);
 		Assembly listDeleteGenome = assemblyList.findItem(deleteGenome);
@@ -146,12 +168,6 @@ bool deleteItem(Assembly genome_to_delete){
 		cout << "\nGenome removed from the Linked List" << endl;
 		retVal = true;
 		}
-/*
-	// HASH DELETE CODE tbd
-	// Ex. BdayHash.delete(*name)
-
-
-	*/
 	// 3. Report results
 	return retVal;
 }
@@ -183,7 +199,7 @@ int main()
 	const int NUMBER_CONTIGS{ 2 };
 	const int SIZE_bases{ 3 };
 	const int N50_kbp{ 4 };
-	const int GC_CONTENT{ 5 };
+	const int SIZE_CONTENT{ 5 };
 	const int PERCENT_UNKNOWN{ 6 };
 
 	const int       MAX_ASSEMBLIES = 500;              // Maximum persons in our database
@@ -229,7 +245,6 @@ int main()
 			Array<string> aRow(GNomeCSVCols);
 			// Get the name and birthday...
 			getline(inFile, csvLine);
-			cout << "Processing this line : [" << csvLine << "]" << endl;
 
 			// ok here we go...
 			rowsplit(csvLine, aRow, ',');
@@ -239,10 +254,10 @@ int main()
 			int    aNumContigs(stoi(aRow[NUMBER_CONTIGS]));
 			int    aSizeBases(stoi(aRow[SIZE_bases]));
 			int    aN50kbp(stoi(aRow[N50_kbp]));
-			double aGCContent(stod(aRow[GC_CONTENT]));
+			double aSIZEContent(stod(aRow[SIZE_CONTENT]));
 			double aPercentUnknown(stod(aRow[PERCENT_UNKNOWN]));
 
-			assemblyByName[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aGCContent, aPercentUnknown, NAME);
+			assemblyByName[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aSIZEContent, aPercentUnknown, NAME);
 
 			//// Add to Linked List, Hash Table and BST
 			addItem(assemblyByName[count]);
@@ -297,7 +312,7 @@ int main()
 			int    NumContigs;
 			int    SizeBases;
 			int    N50kbp;
-			double GCContent;
+			double SIZEContent;
 			double PercentUnknown;
 			while (flag) {
 				cout << " Enter the name for the new Genome. " << endl;
@@ -312,11 +327,11 @@ int main()
 				cin >> SizeBases;
 				cout << " \nEnter the N50 for the new Genome. " << endl;
 				cin >> N50kbp;
-				cout << " \nEnter the GC Content for the new Genome. " << endl;
-				cin >> GCContent;
+				cout << " \nEnter the SIZE Content for the new Genome. " << endl;
+				cin >> SIZEContent;
 				cout << " \nEnter the percent unknown for the new Genome. " << endl;
 				cin >> PercentUnknown;
-				assemblyByName[count]    = new Assembly(Name, Method, NumContigs, SizeBases, N50kbp, GCContent, PercentUnknown, NAME);
+				assemblyByName[count]    = new Assembly(Name, Method, NumContigs, SizeBases, N50kbp, SIZEContent, PercentUnknown, NAME);
 				//// Add to Linked List, Hash Table and BST
 				addItem(assemblyByName[count]);
 
@@ -361,11 +376,6 @@ int main()
 		{
 			bool removingDataItems = true;
 			string r_name;
-
-			//Assembly * del3 = &AssemblyByName03;
-			//if (deleteItem(AssemblyByName03)) // DELETE entrypoint!
-			//	cout << "Deleting done" << endl;
-
 
 			 //loop allows you to keep deleting items to your hearts content...
 			while (removingDataItems) {
@@ -420,10 +430,10 @@ int main()
 		case 4:
 		{
 			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY HASH TABLE SEQUENCE~~~~~~~~~~~~~" << endl;
-			cout << string(160, '=') << endl;
-			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+			cout << string(110, '=') << endl;
+			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
 				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
-			cout << string(160, '=') << endl;
+			cout << string(110, '=') << endl;
 			table.printTable();
 			break;
 		}
@@ -436,18 +446,25 @@ int main()
 		//************************************************************//
 		case 5:
 		{
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY N50~~~~~~~~~~~~~" << endl;
-			cout << string(160, '=') << endl;
-			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING LINKED LIST BY N50~~~~~~~~~~~~~" << endl;
+			cout << string(110, '=') << endl;
+			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
 				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
-			cout << string(160, '=') << endl;
+			cout << string(110, '=') << endl;
 			assemblyList.print();
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY NUM CONTIGS~~~~~~~~~~~~~" << endl;
-			cout << string(160, '=') << endl;
-			cout << setw(80) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING BST BY SIZE~~~~~~~~~~~~~" << endl;
+			cout << string(110, '=') << endl;
+			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
 				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
-			cout << string(160, '=') << endl;
+			cout << string(110, '=') << endl;
 			assemblyTree.inorderTraverse(displayAssembly);
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING 2-3 Tree NUM_CONTIGS~~~~~~~~~~~~~" << endl;
+			cout << string(110, '=') << endl;
+			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(110, '=') << endl;
+			int num = 0;
+			assemblyCTree.print(inorder, &num);
 		break;
 		}
 
@@ -457,8 +474,11 @@ int main()
 		case 6:
 		{
 			//printOrders(&assemblyCTree);
+			cout << string(110, '=');
+			cout << endl << endl << "~~~~~~~~~~~~PRINTING INDENTED BST~~~~~~~~~~~~~" << endl;
+			cout << string(110, '=') << endl;
 			assemblyTree.prettyPrint(displayPretty);
-			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			cout << endl << string(110, '=') << endl;
 			break;
 		}
 
@@ -491,9 +511,9 @@ int main()
 			ofstream outFile;
 			outFile.open("Outfile.csv");
 			string aname = "wol_proteins.fasta.gz";
-			Assembly searchGenome(aname, "", 0, 0, 0, 0.0, 0.0, NAME);
-			Assembly foundGenome = assemblyTreeName.find(searchGenome);
-			outFile << foundGenome << endl;
+			//Assembly searchGenome(aname, "", 0, 0, 0, 0.0, 0.0, NAME);
+			//Assembly foundGenome = assemblyTreeName.find(searchGenome);
+			//outFile << foundGenome << endl;
 
 			cout << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl << endl << endl;
 			loop = false;
