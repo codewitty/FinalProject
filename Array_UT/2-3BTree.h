@@ -45,7 +45,6 @@ public:
 	const T* const find(T* const);
 	int deleteItem(const T* const pKey);
 	int print(eTreeTraversal eTraversalMethod, int *pNrOfItemsPrinted) const;
-	void indentedPrint(CNode<T>* pNode, int indent = 0);
 	int removeAll(void);
 private:
 	int add(CNode<T>* const pNode, const T* const pKey);
@@ -57,7 +56,7 @@ private:
 		bool *bFound) const;
 	CNode<T>* getMinNode(CNode<T>* pNode) const;
 	CNode<T>* getMaxNode(CNode<T>* pNode) const;
-	CNode<T>* m_pRoot;  // The ROOT...
+	CNode<T>* m_pRoot;
 	CNode<T>* getNextInorderKey(CNode<T>* pNode, T* pKey) const;
 	CNode<T>* getNextPreorderKey(CNode<T>* pNode, T* pKey) const;
 	CNode<T>* getNextPostorderKey(CNode<T>* pNode, T* pKey) const;
@@ -1045,36 +1044,6 @@ int CTree<T>::print(eTreeTraversal eTraversalMethod, int *pNrOfItemsPrinted) con
 	}
 	*pNrOfItemsPrinted = iItemCnt;
 	return iReturnCode;
-}
-
-template<class T>
-inline void CTree<T>::indentedPrint(CNode<T>* pNode, int indent)
-{
-		if (node is a leaf) {
-
-			/* Here print node's value/values */
-
-		}
-		else if (node has 2 children) {
-
-			indentedPrint(node.leftChild);
-			/* Here print node's value */
-			indentedPrint(node.rightChild);
-
-		}
-		else if (node has 3 children) {
-
-			indentedPrint(node.leftChild);
-		/* Here print node's left value */
-		indentedPrint(node.middleChild);
-		/* Here print node's right value */
-		recursiveindentedPrintPrint(node.rightChild)
-
-	}
-
-	/* Shouldn't be other cases in 2-3 trees */
-}
-
 }
 
 /** @brief        Member function taking two arguments and returning address of next inorder node.
