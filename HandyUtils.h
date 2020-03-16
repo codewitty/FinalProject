@@ -17,7 +17,7 @@ string ltrim(string s);
 string rtrim(string s);
 const string WHITESPACE = " \n\r\t\f\v";
 const int ARRAY_SIZE{ 20 };
-bool exitFunction();
+bool exitFunction(int);
 
 
 void DeleteEmptyLines(string &Path)
@@ -51,27 +51,35 @@ string trim(string s)
 }
 
 
-bool exitFunction() {
+bool exitFunction(int choice) {
 	bool retVal;
 	char rem_choice;
-	cout << "\n Would you like to remove another data item? \n"
-		 << " Enter Y for \"Yes\" or any other key for \"No\"\n";
+	if (choice == 1) {
+		cout << "\nWould you like to add another Genome Assembly? \n"
+			 << "Enter Y for \"Yes\" or any other key for \"No\"\n";
+	}
+	else if (choice == 2) {
+		cout << "\nWould you like to remove another Genome Assembly? \n"
+			 << "Enter Y for \"Yes\" or any other key for \"No\"\n";
+	}
+	else if (choice == 3) {
+		cout << "\nWould you like to search for another Genome Assembly? \n"
+			 << "Enter Y for \"Yes\" or any other key for \"No\"\n";
+	}
 	cin >> rem_choice;
 	cin.ignore(32767, '\n');
 	if (cin.fail()) {
 		cin.clear();
 		cin.ignore(32767, '\n');
-		cout << "\n Exiting to main menu" << endl;
+		cout << "\nExiting to main menu" << endl;
 		retVal = false;
 	}
 	if (rem_choice == 'Y' || rem_choice == 'y') {
 		retVal = true;
 	}
 	else {
-		cout << "\n Exiting to main menu" << endl;
+		cout << "\nExiting to main menu" << endl;
 		retVal = false;
 	}
 	return retVal;
 }
-
-		

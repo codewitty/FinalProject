@@ -113,24 +113,25 @@ bool searchItem(Assembly searchGenome) {
 	bool retVal{false};
 	if (table.search(searchGenome)){
 		Assembly foundGenome = table.getObject(searchGenome);
-		cout << "\nHere is the Data item found in the Hash Table" << endl;
+		cout << string(138, '=');
+		cout << "\nData item found in the Hash Table  : ";
 		table.printObj(foundGenome);
-		cout << endl;
-		cout << "\nHere is the Data item found in the BST" << endl;
+		cout << "Data item found in the BST         : ";
 		// Change key for BST
 		foundGenome.setOrdering(assemblyAttribute::SIZE);
 		Assembly treeGenome = assemblyTree.find(foundGenome);
-		cout << treeGenome << endl;
-		cout << "\nHere is the Data item found in the Linked List" << endl;
+		cout << treeGenome;
+		cout << "\nData item found in the Linked List : ";
 		// Change key for Linked List
 		foundGenome.setOrdering(assemblyAttribute::N50);
 		Assembly listGenome = assemblyList.findItem(foundGenome);
 		cout << listGenome;
-		cout << "\nHere is the Data item found in the 2-3 Tree" << endl;
+		cout << "\nData item found in the 2-3 Tree    : ";
 		// Change key for 2-3 Tree
 		foundGenome.setOrdering(assemblyAttribute::NUM_CONTIGS);
 		const Assembly * cTreeGenome = assemblyCTree.find(&foundGenome);
 		cout << *cTreeGenome << endl;
+		cout << string(138, '=') << endl;
 		retVal = true;
 	}
 	return retVal;
@@ -145,28 +146,29 @@ bool deleteItem(Assembly genome_to_delete){
 	else {
 		// ==> foundAssemblyRecord found by name, get the record.
 		Assembly deleteGenome = table.getObject(genome_to_delete);
-		//assemblyTreeName.remove(deleteGenome);
-		cout << " We are deleting this genome" << endl;
+		// Remove from Hash Table
+		cout << string(141, '=');
+		cout << "\nData item removed from the Hash Table : ";
 		table.printObj(deleteGenome);
 		table.remove(deleteGenome);
 		// Remove from BST
 		deleteGenome.setOrdering(assemblyAttribute::SIZE);
-		cout << "\nHere is the Data item to be removed from the BST" << endl;
+		cout << "Data item removed from the BST        : ";
 		Assembly dTreeGenome = assemblyTree.find(deleteGenome);
-		cout << dTreeGenome << endl;
+		cout << dTreeGenome;
 		assemblyTree.remove(deleteGenome);
 		// Remove from 2-3 Tree 
 		deleteGenome.setOrdering(assemblyAttribute::NUM_CONTIGS);
-		cout << "\nHere is the Data item to be removed from the 2-3 Tree" << endl;
+		cout << "\nData item removed from the 2-3 Tree   : ";
 		const Assembly * dcTreeGenome = assemblyCTree.find(&deleteGenome);
-		cout << *dcTreeGenome << endl;
+		cout << *dcTreeGenome;
 		assemblyCTree.deleteItem(&deleteGenome);
-		cout << "\nHere is the Data item to be removed from the Linked List" << endl;
+		cout << "\nData item removed from the Linked List: ";
 		deleteGenome.setOrdering(assemblyAttribute::N50);
 		Assembly listDeleteGenome = assemblyList.findItem(deleteGenome);
 		cout << listDeleteGenome;
 		assemblyList.remove(listDeleteGenome);
-		cout << "\nGenome removed from the Linked List" << endl;
+		cout << endl << string(141, '=') << endl;
 		retVal = true;
 		}
 	// 3. Report results
@@ -295,7 +297,12 @@ int main()
 		// User response recorded
 		cin >> choice;
 		cin.ignore(32767, '\n');
-		cout << endl << endl;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "\n   !!!INVALID INPUT DETECTED!!!!Exiting Program!!" << endl;
+			loop = false;
+		}
 
 		// This switch will execute all actions from the menu
 		switch (choice)
@@ -316,21 +323,21 @@ int main()
 			double SIZEContent;
 			double PercentUnknown;
 			while (flag) {
-				cout << " Enter the name for the new Genome. " << endl;
+				cout << "Enter the name for the new Genome. " << endl;
 				getline(cin, new_genome);
 				Name = trim(new_genome);
-				cout << " Enter the method for the new Genome. " << endl;
+				cout << "Enter the method for the new Genome. " << endl;
 				getline(cin, new_method);
 				Method = trim(new_method);
-				cout << " Enter the number of contigs for the new Genome. " << endl;
+				cout << "Enter the number of contigs for the new Genome. " << endl;
 				cin >> NumContigs;
-				cout << " \nEnter the size of bases for the new Genome. " << endl;
+				cout << "Enter the size of bases for the new Genome. " << endl;
 				cin >> SizeBases;
-				cout << " \nEnter the N50 for the new Genome. " << endl;
+				cout << "Enter the N50 for the new Genome. " << endl;
 				cin >> N50kbp;
-				cout << " \nEnter the SIZE Content for the new Genome. " << endl;
+				cout << "Enter the SIZE Content for the new Genome. " << endl;
 				cin >> SIZEContent;
-				cout << " \nEnter the percent unknown for the new Genome. " << endl;
+				cout << "Enter the percent unknown for the new Genome. " << endl;
 				cin >> PercentUnknown;
 				assemblyByName[count]    = new Assembly(Name, Method, NumContigs, SizeBases, N50kbp, SIZEContent, PercentUnknown, assemblyAttribute::NAME);
 				//// Add to Linked List, Hash Table and BST
@@ -365,7 +372,8 @@ int main()
 
 				*/
 				// Set flag using exit function
-				flag = exitFunction();
+				int num = 1;
+				flag = exitFunction(num);
 			}
 			break;
 		}
@@ -380,22 +388,15 @@ int main()
 
 			 //loop allows you to keep deleting items to your hearts content...
 			while (removingDataItems) {
-				cout << " Enter the name of the Genome Assembly to be deleted.\n";
-				cout << " ";
+				cout << "Enter the name of the Genome Assembly to be deleted.\n";
 				getline(cin, r_name);
 				string tname = trim(r_name);
 				Assembly delete_genome(tname, "", 0, 0, 0, 0.0, 0.0, assemblyAttribute::NAME);
 				// deleteItem is the entry point to delete the item from ALL data structures.
-				if (deleteItem(delete_genome)) // DELETE entrypoint!
-				{
-					cout << "Deleting done" << endl;
-				}
-				else 
-				{
-					cout << "Item not found or deleted." << endl;
-				}
+				deleteItem(delete_genome); // DELETE entrypoint!
 			// Set flag using exit function
-			removingDataItems = exitFunction();
+			int num = 2;
+			removingDataItems = exitFunction(num);
 			}
 		break;
 		} // End switch
@@ -409,18 +410,15 @@ int main()
 			string name;
 			while (sflag)
 			{
-				cout << " Enter the name of the genome assembly you would like to look for.\n";
+				cout << "Enter the name of the genome assembly you would like to look for.\n";
 				getline(cin, name);
 				string tname = trim(name);
 				Assembly search_genome(tname, "", 0, 0, 0, 0.0, 0.0, assemblyAttribute::NAME);
-
-				if (searchItem(search_genome)) {
-					cout << "\nData item found" << endl;
-				}
-				else
-					cout << "\nData item not found" << endl;
+				// Search for Genome Assembly in all data structures
+				searchItem(search_genome);
 				// Set flag using exit function
-				sflag = exitFunction();
+				int num = 3;
+				sflag = exitFunction(num);
 			}
 			break;
 		}
@@ -430,7 +428,7 @@ int main()
 		//************************************************************//
 		case 4:
 		{
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BY HASH TABLE SEQUENCE~~~~~~~~~~~~~" << endl;
+			cout << endl << string(40, '~') << "PRINTING BY HASH TABLE SEQUENCE~~~~~~~~~~~~~" << string (40, '~') << endl;
 			cout << string(110, '=') << endl;
 			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
 				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
@@ -442,30 +440,31 @@ int main()
 		//************************************************************//
 		// case 5 PRINTS data in sorted key sequence using 2 data	  // 
 		//	structures, Linked List and BST.						  //
+		// 2-3 Tree is printed by the Num_Contigs key.				  //
+		// BST is printed by the Size key.					   		  //
 		// Linked List is printed by the N50 key.					  //
-		// BST is printed by the Num_Contigs key.					  //
 		//************************************************************//
 		case 5:
 		{
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING LINKED LIST BY N50~~~~~~~~~~~~~" << endl;
-			cout << string(110, '=') << endl;
-			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
-				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
-			cout << string(110, '=') << endl;
-			assemblyList.print();
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING BST BY SIZE~~~~~~~~~~~~~" << endl;
-			cout << string(110, '=') << endl;
-			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
-				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
-			cout << string(110, '=') << endl;
-			assemblyTree.inorderTraverse(displayAssembly);
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING 2-3 Tree NUM_CONTIGS~~~~~~~~~~~~~" << endl;
+			cout << endl << string(39, '~') << "PRINTING 2-3 Tree BY NUM_CONTIGS" << string(39, '~') << endl;
 			cout << string(110, '=') << endl;
 			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
 				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
 			cout << string(110, '=') << endl;
 			int num = 0;
 			assemblyCTree.print(inorder, &num);
+			cout << endl << string(45, '~') << "PRINTING BST BY SIZE" << string(45, '~') << endl;
+			cout << string(110, '=') << endl;
+			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(110, '=') << endl;
+			assemblyTree.inorderTraverse(displayAssembly);
+			cout << endl << string(41, '~') << "PRINTING LINKED LIST BY N50" << string(41,'~')  << endl;
+			cout << string(110, '=') << endl;
+			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(110, '=') << endl;
+			assemblyList.print();
 		break;
 		}
 

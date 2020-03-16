@@ -3,7 +3,6 @@
 #include <string>
 using namespace std;
 
-#undef NOWINHEAD
 #ifndef NOWINHEAD
 #include <Windows.h>
 

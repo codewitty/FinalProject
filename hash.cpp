@@ -36,7 +36,6 @@ void HashTable::add(Assembly assemblyObj)
 void HashTable::remove(Assembly assemblyObj)
 {
 	int index = hashFunc(assemblyObj.getName());
-	//cout << index << endl;
 	table[index].remove(assemblyObj);
 
 
@@ -70,8 +69,6 @@ bool HashTable::search(Assembly assemblyObj)
 	bool retVal = false;
 	int index = hashFunc(assemblyObj.getName());
 	if (table[index].find(assemblyObj)) {
-		cout << "Item exists!" << endl;
-		printObj(assemblyObj);
 		retVal = true;
 	}
 	else {
