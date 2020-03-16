@@ -1,12 +1,10 @@
-#ifndef HASH_H
-#define HASH_H
-
+#pragma once
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include "Assembly.h"
 #include "ArrayTemplateClass.h"
-#include "HashBucket.h"
+//#include "HashBucket.h"
 #include "LinkedList.h"
 
 
@@ -29,15 +27,3 @@ public:
 	// still need search and other basic functions
 };
 
-
-
-
-
-
-
-
-
-
-
-
-#endif // !HASH_H

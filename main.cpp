@@ -14,6 +14,7 @@
 #include "Node.h"
 #include "hash.h"
 
+
 using namespace std;
 
 void SkipBOM(std::ifstream &in)
@@ -93,16 +94,16 @@ bool addItem(Assembly * anItem){
 
 	// TREE ADD CODE
 //	assemblyTreeName.add(*anItem);
-	anItem->setOrdering(SIZE);
+	anItem->setOrdering(assemblyAttribute::SIZE);
 	assemblyTree.add(*anItem);
 	// 2-3 tree...
-	anItem->setOrdering(NUM_CONTIGS);
+	anItem->setOrdering(assemblyAttribute::NUM_CONTIGS);
 	assemblyCTree.insert(anItem);
 
 
 	
 	// LINKED LIST ADD CODE
-	anItem->setOrdering(N50);
+	anItem->setOrdering(assemblyAttribute::N50);
 	assemblyList.insert(*anItem);
 	// 3. Report results
 	return true;
@@ -117,17 +118,17 @@ bool searchItem(Assembly searchGenome) {
 		cout << endl;
 		cout << "\nHere is the Data item found in the BST" << endl;
 		// Change key for BST
-		foundGenome.setOrdering(SIZE);
+		foundGenome.setOrdering(assemblyAttribute::SIZE);
 		Assembly treeGenome = assemblyTree.find(foundGenome);
 		cout << treeGenome << endl;
 		cout << "\nHere is the Data item found in the Linked List" << endl;
 		// Change key for Linked List
-		foundGenome.setOrdering(N50);
+		foundGenome.setOrdering(assemblyAttribute::N50);
 		Assembly listGenome = assemblyList.findItem(foundGenome);
 		cout << listGenome;
 		cout << "\nHere is the Data item found in the 2-3 Tree" << endl;
 		// Change key for 2-3 Tree
-		foundGenome.setOrdering(NUM_CONTIGS);
+		foundGenome.setOrdering(assemblyAttribute::NUM_CONTIGS);
 		const Assembly * cTreeGenome = assemblyCTree.find(&foundGenome);
 		cout << *cTreeGenome << endl;
 		retVal = true;
@@ -149,19 +150,19 @@ bool deleteItem(Assembly genome_to_delete){
 		table.printObj(deleteGenome);
 		table.remove(deleteGenome);
 		// Remove from BST
-		deleteGenome.setOrdering(SIZE);
+		deleteGenome.setOrdering(assemblyAttribute::SIZE);
 		cout << "\nHere is the Data item to be removed from the BST" << endl;
 		Assembly dTreeGenome = assemblyTree.find(deleteGenome);
 		cout << dTreeGenome << endl;
 		assemblyTree.remove(deleteGenome);
 		// Remove from 2-3 Tree 
-		deleteGenome.setOrdering(NUM_CONTIGS);
+		deleteGenome.setOrdering(assemblyAttribute::NUM_CONTIGS);
 		cout << "\nHere is the Data item to be removed from the 2-3 Tree" << endl;
 		const Assembly * dcTreeGenome = assemblyCTree.find(&deleteGenome);
 		cout << *dcTreeGenome << endl;
 		assemblyCTree.deleteItem(&deleteGenome);
 		cout << "\nHere is the Data item to be removed from the Linked List" << endl;
-		deleteGenome.setOrdering(N50);
+		deleteGenome.setOrdering(assemblyAttribute::N50);
 		Assembly listDeleteGenome = assemblyList.findItem(deleteGenome);
 		cout << listDeleteGenome;
 		assemblyList.remove(listDeleteGenome);
@@ -257,7 +258,7 @@ int main()
 			double aSIZEContent(stod(aRow[SIZE_CONTENT]));
 			double aPercentUnknown(stod(aRow[PERCENT_UNKNOWN]));
 
-			assemblyByName[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aSIZEContent, aPercentUnknown, NAME);
+			assemblyByName[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aSIZEContent, aPercentUnknown, assemblyAttribute::NAME);
 
 			//// Add to Linked List, Hash Table and BST
 			addItem(assemblyByName[count]);
@@ -331,7 +332,7 @@ int main()
 				cin >> SIZEContent;
 				cout << " \nEnter the percent unknown for the new Genome. " << endl;
 				cin >> PercentUnknown;
-				assemblyByName[count]    = new Assembly(Name, Method, NumContigs, SizeBases, N50kbp, SIZEContent, PercentUnknown, NAME);
+				assemblyByName[count]    = new Assembly(Name, Method, NumContigs, SizeBases, N50kbp, SIZEContent, PercentUnknown, assemblyAttribute::NAME);
 				//// Add to Linked List, Hash Table and BST
 				addItem(assemblyByName[count]);
 
@@ -383,7 +384,7 @@ int main()
 				cout << " ";
 				getline(cin, r_name);
 				string tname = trim(r_name);
-				Assembly delete_genome(tname, "", 0, 0, 0, 0.0, 0.0, NAME);
+				Assembly delete_genome(tname, "", 0, 0, 0, 0.0, 0.0, assemblyAttribute::NAME);
 				// deleteItem is the entry point to delete the item from ALL data structures.
 				if (deleteItem(delete_genome)) // DELETE entrypoint!
 				{
@@ -411,7 +412,7 @@ int main()
 				cout << " Enter the name of the genome assembly you would like to look for.\n";
 				getline(cin, name);
 				string tname = trim(name);
-				Assembly search_genome(tname, "", 0, 0, 0, 0.0, 0.0, NAME);
+				Assembly search_genome(tname, "", 0, 0, 0, 0.0, 0.0, assemblyAttribute::NAME);
 
 				if (searchItem(search_genome)) {
 					cout << "\nData item found" << endl;

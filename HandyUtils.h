@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "Node.h"
 #include "LinkedList.h"
@@ -18,14 +19,15 @@ const string WHITESPACE = " \n\r\t\f\v";
 const int ARRAY_SIZE{ 20 };
 bool exitFunction();
 
+
 void DeleteEmptyLines(string &Path)
 {
-	ifstream in(Path);
+	ifstream inF(Path);
 	string line, text;
-	while (std::getline(in, line))
+	while (std::getline(inF, line))
 		if (!(line.empty() || line.find_first_not_of(' ') == std::string::npos))
 			text += line + "\n";
-	in.close();
+	inF.close();
 	ofstream out(Path);
 	out << text;
 }

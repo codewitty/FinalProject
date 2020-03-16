@@ -3,8 +3,37 @@
 #include <string>
 using namespace std;
 
-enum assemblyAttribute {
-	NONE,
+#undef NOWINHEAD
+#ifndef NOWINHEAD
+#include <Windows.h>
+
+// windows colors
+// Windows specific console color pallet.
+// Black is 0, through Bright white which is 15.
+enum WinColors {
+	Black = 0,
+	Blue,
+	Green,
+	Cyan,
+	Red,
+	Purple,
+	Yellow,
+	White,
+	Bright_Black,
+	Bright_Blue,
+	Bright_Green,
+	Bright_Cyan,
+	Bright_Red,
+	Bright_Purple,
+	Bright_Yellow,
+	Bright_White   // 15
+};
+
+#endif /* NOWINHEAD */
+
+
+enum class assemblyAttribute {
+	NONE = 0,
 	NAME,
 	TYPE,
 	NUM_CONTIGS,

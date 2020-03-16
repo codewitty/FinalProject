@@ -12,7 +12,7 @@ Assembly::Assembly()
 	gc = 0.0;      // float (GC content)      (float)
 	unknown = 0.0;      // float (Percent Unknown) (float)
 	pkey = nullptr;  // void *
-	keyType = NONE;     // NONE for now...
+	keyType = assemblyAttribute::NONE;     // NONE for now...
 }
 
 Assembly::Assembly(string aName, string aType, int aNumContigs, int aSize, int anN50, double aGc, double anUnknown, assemblyAttribute anOpKeyType)
@@ -47,37 +47,37 @@ void Assembly::setOrdering(assemblyAttribute anOrder)
 	// UNKNOWN      (float)
 	switch (anOrder)
 	{
-	case NONE:
+	case assemblyAttribute::NONE:
 		pkey = nullptr;
-		this->keyType = NONE;
+		this->keyType = assemblyAttribute::NONE;
 		break;
-	case NAME:        // NAME and TYPE are strings
+	case assemblyAttribute::NAME:        // NAME and TYPE are strings
 		pkey = static_cast<void*>(&name);
-		this->keyType = NAME;
+		this->keyType = assemblyAttribute::NAME;
 		break;
-	case TYPE:
+	case assemblyAttribute::TYPE:
 		pkey = static_cast<void*>(&type);
-		this->keyType = TYPE;
+		this->keyType = assemblyAttribute::TYPE;
 		break;
-	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
+	case assemblyAttribute::NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
 		pkey = static_cast<void*>(&num_contigs);
-		this->keyType = NUM_CONTIGS;
+		this->keyType = assemblyAttribute::NUM_CONTIGS;
 		break;
-	case SIZE:
+	case assemblyAttribute::SIZE:
 		pkey = static_cast<void*>(&size);
-		this->keyType = SIZE;
+		this->keyType = assemblyAttribute::SIZE;
 		break;
-	case N50:
+	case assemblyAttribute::N50:
 		pkey = static_cast<void*>(&n50);
-		this->keyType = N50;
+		this->keyType = assemblyAttribute::N50;
 		break;
-	case GC:          // GC, UNKNOWN are float
+	case assemblyAttribute::GC:          // GC, UNKNOWN are float
 		pkey = static_cast<void*>(&gc);
-		this->keyType = GC;
+		this->keyType = assemblyAttribute::GC;
 		break;
-	case UNKNOWN:
+	case assemblyAttribute::UNKNOWN:
 		pkey = static_cast<void*>(&unknown);
-		this->keyType = UNKNOWN;
+		this->keyType = assemblyAttribute::UNKNOWN;
 		break;
 	default: // code to be executed if n doesn't match any cases
 		cout << "Assembly::setOrdering() : Operator (>) cant happen, keytype is BOGUS!" << endl;
@@ -180,23 +180,23 @@ bool Assembly::operator<(const Assembly& right) const
 	bool retval = false;
 	switch (this->keyType)
 	{
-	case NONE:
+	case assemblyAttribute::NONE:
 		cout << "\nAssembly::operator>() : Operator (<) cant happen, keytype is 'NONE'" << endl;
 		retval = false;
 		break;
-	case NAME:        // NAME and TYPE are strings
-	case TYPE:
+	case assemblyAttribute::NAME:        // NAME and TYPE are strings
+	case assemblyAttribute::TYPE:
 		if (*(static_cast<string*>(pkey)) < *(static_cast<string*>(right.pkey)))
 			retval = true;
 		break;
-	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
-	case SIZE:
-	case N50:
+	case assemblyAttribute::NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
+	case assemblyAttribute::SIZE:
+	case assemblyAttribute::N50:
 		if (*(static_cast<int*>(pkey)) < *(static_cast<int*>(right.pkey)))
 			retval = true;
 		break;
-	case GC:          // GC, UNKNOWN are float
-	case UNKNOWN:
+	case assemblyAttribute::GC:          // GC, UNKNOWN are float
+	case assemblyAttribute::UNKNOWN:
 			retval = true;
 		break;
 	default: // code to be executed if n doesn't match any cases
@@ -223,23 +223,23 @@ bool Assembly::operator>(const Assembly& right) const
 	bool retval = false;
 	switch (this->keyType)
 	{
-	case NONE:
+	case assemblyAttribute::NONE:
 		cout << "\nAssembly::operator>() : Operator (>) cant happen, keytype is 'NONE'" << endl;
 		retval = false;
 		break;
-	case NAME:        // NAME and TYPE are strings
-	case TYPE:
+	case assemblyAttribute::NAME:        // NAME and TYPE are strings
+	case assemblyAttribute::TYPE:
 		if (*(static_cast<string*>(pkey)) > * (static_cast<string*>(right.pkey)))
 			retval = true;
 		break;
-	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
-	case SIZE:
-	case N50:
+	case assemblyAttribute::NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
+	case assemblyAttribute::SIZE:
+	case assemblyAttribute::N50:
 		if (*(static_cast<int*>(pkey)) > * (static_cast<int*>(right.pkey)))
 			retval = true;
 		break;
-	case GC:          // GC, UNKNOWN are float
-	case UNKNOWN:
+	case assemblyAttribute::GC:          // GC, UNKNOWN are float
+	case assemblyAttribute::UNKNOWN:
 		if (*(static_cast<float*>(pkey)) > * (static_cast<double*>(right.pkey)))
 			retval = true;
 		break;
@@ -267,23 +267,23 @@ bool Assembly::operator==(const Assembly& right) const
 	bool retval = false;
 	switch (this->keyType)
 	{
-	case NONE:
+	case assemblyAttribute::NONE:
 		cout << "\nAssembly::operator>() : Operator (==) cant happen, keytype is 'NONE'" << endl;
 		retval = false;
 		break;
-	case NAME:        // NAME and TYPE are strings
-	case TYPE:
+	case assemblyAttribute::NAME:        // NAME and TYPE are strings
+	case assemblyAttribute::TYPE:
 		if (*(static_cast<string*>(pkey)) == *(static_cast<string*>(right.pkey)))
 			retval = true;
 		break;
-	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
-	case SIZE:
-	case N50:
+	case assemblyAttribute::NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
+	case assemblyAttribute::SIZE:
+	case assemblyAttribute::N50:
 		if (*(static_cast<int*>(pkey)) == *(static_cast<int*>(right.pkey)))
 			retval = true;
 		break;
-	case GC:          // GC, UNKNOWN are float
-	case UNKNOWN:
+	case assemblyAttribute::GC:          // GC, UNKNOWN are float
+	case assemblyAttribute::UNKNOWN:
 		if (*(static_cast<float*>(pkey)) == *(static_cast<double*>(right.pkey)))
 			retval = true;
 		break;
@@ -316,26 +316,26 @@ void Assembly::printItemKey()
 {
 	switch (keyType)
 	{
-	case NONE:
+	case assemblyAttribute::NONE:
 		cout << "\nAssembly::printItemKey() : Cant happen, keytype is 'NONE'" << endl;
 		break;
-	case NAME:        // NAME and TYPE are strings
-	case TYPE:
+	case assemblyAttribute::NAME:        // NAME and TYPE are strings
+	case assemblyAttribute::TYPE:
 	{
 		string ourStrKey = *(static_cast<string *>(pkey));
 		cout << ourStrKey << "\n";
 		break;
 	}
-	case NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
-	case SIZE:
-	case N50:
+	case assemblyAttribute::NUM_CONTIGS: // NUM_CONTIGS, N50, GC are integers
+	case assemblyAttribute::SIZE:
+	case assemblyAttribute::N50:
 	{
 		int ourIntKey = *(static_cast<int *>(pkey));
 		cout << ourIntKey << "\n";
 		break;
 	}
-	case GC:          // GC, UNKNOWN are float
-	case UNKNOWN:
+	case assemblyAttribute::GC:          // GC, UNKNOWN are float
+	case assemblyAttribute::UNKNOWN:
 	{
 		double ourDoubleKey = *(static_cast<double *>(pkey));
 		cout << ourDoubleKey << "\n";
@@ -349,8 +349,58 @@ void Assembly::printItemKey()
 
 std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 {
-	strm << setw(30) << left << obj.name << setw(20) << obj.type << setw(15) << obj.num_contigs
-		<< setw(10) << obj.size << setw(10) << obj.n50 << setw(10) << obj.gc << setw(10) << obj.unknown;
+	// output the NAME
+#ifndef NOWINHEAD
+	// windows screen handle used to map stdio...
+	HANDLE screen = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SetConsoleTextAttribute(screen, Bright_White);
+	if (obj.keyType == assemblyAttribute::NAME) {
+		SetConsoleTextAttribute(screen, Bright_Green);
+		strm << setw(30) << left << obj.name; //
+		SetConsoleTextAttribute(screen, Bright_White);
+	} else
+#endif
+		strm << setw(30) << left << obj.name; //
+
+	// output the TYPE
+	strm << setw(20) << obj.type;
+
+	// output the NUM_CONTIGS
+#ifndef NOWINHEAD
+	if (obj.keyType == assemblyAttribute::NUM_CONTIGS) {
+		SetConsoleTextAttribute(screen, Bright_Green);
+		strm << setw(15) << obj.num_contigs; //
+		SetConsoleTextAttribute(screen, Bright_White);
+	} else
+#endif
+		strm << setw(15) << obj.num_contigs; //
+
+		// output the SIZE
+#ifndef NOWINHEAD
+	if (obj.keyType == assemblyAttribute::SIZE) {
+		SetConsoleTextAttribute(screen, Bright_Green);
+		strm << setw(10) << obj.size; //
+		SetConsoleTextAttribute(screen, Bright_White);
+	}
+	else
+#endif
+	strm << setw(10) << obj.size;  //
+
+			// output the N50
+#ifndef NOWINHEAD
+	if (obj.keyType == assemblyAttribute::N50) {
+		SetConsoleTextAttribute(screen, Bright_Green);
+		strm << setw(10) << obj.n50; //
+		SetConsoleTextAttribute(screen, Bright_White);
+	}
+	else
+#endif
+	strm << setw(10) << obj.n50;   //
+
+
+	strm << setw(10) << obj.gc;
+	strm << setw(10) << obj.unknown;
 	return strm;
 }
 // Const version
