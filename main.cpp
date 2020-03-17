@@ -103,6 +103,8 @@ bool addItem(Assembly * anItem){
 	anItem->setOrdering(assemblyAttribute::N50);
 	assemblyList.insert(*anItem);
 	// 3. Report results
+	anItem->setOrdering(assemblyAttribute::NAME);
+
 	return true;
 }
 
