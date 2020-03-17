@@ -1,29 +1,64 @@
-#pragma once
+#ifndef HASH_H
+#define HASH_H
+
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include "Assembly.h"
-#include "ArrayTemplateClass.h"
-//#include "HashBucket.h"
 #include "LinkedList.h"
 
 
 class HashTable {
 private:
-	static const int tableSize = 500;
+	// table size
+	static const int tableSize = 11;
+
+	// setting a hash table array of linked lists of Assembly objects
 	LinkedList<Assembly> table[tableSize];
+
+	int numberOfItems = 0;
+	int collisions = 0;
+	double loadFactor;
 
 public:
 	HashTable();
+	~HashTable(); 
+
+	// hashing function
 	unsigned int hashFunc(std::string key);
-	Assembly getObject(Assembly assemblyObj);
+	
+	// function to add assembly objects
 	void add(Assembly assemblyObj);
+
+	// function to remove assembly objects
 	void remove(Assembly assemblyObj);
+
+	// prints all the assembly objects in the hash table
 	void printTable();
+
+	// remove all assembly objects in the hash table
 	void clear();
-	void printObj(Assembly assemblyObj); //prints one obj info
+
+	// prints one assembly object given in as a parameter
+	void printObj(Assembly assemblyObj);
+
+	// search the hash table
 	bool search(Assembly assemblyObj);
-	void getLength();
-	// still need search and other basic functions
+
+	// search the hash table and return object found
+	Assembly getObject(Assembly assemblyObj);
+	
+	// getters for table stats
+	int getnumberOfItems();
+	int getLoadFactor();
+	int getCollisionsCount();
+
+	// function to print table statistics for option 7(efficiency)
+	void printStats(); 
 };
 
+
+
+
+
+#endif // !HASH_H

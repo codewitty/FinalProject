@@ -1,4 +1,4 @@
-
+#include <iomanip>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -8,9 +8,26 @@ using namespace std;
 
 HashTable::HashTable()
 {
-	
+	// WHAT TO PUT HERE
 }
 
+/*
+DESTRUCTOR - removes all the data items in the hash table
+Pre - N/A
+Post - clears all data items in the hash table
+Returns - N/A
+*/
+HashTable::~HashTable()
+{
+	clear();
+}
+
+/*
+Hashing function to turn inputted key into a table index position
+Pre - key string
+Post - N/A
+Returns - index position calculated by the hashing function
+*/
 unsigned int HashTable::hashFunc(std::string key)
 {
 	unsigned int result = 0;
@@ -27,21 +44,36 @@ unsigned int HashTable::hashFunc(std::string key)
 
 }
 
+/*
+Add function to add assembly objects into hash table
+Pre - assembly object
+Post - assembly object added to hash table
+Returns - N/A
+*/
 void HashTable::add(Assembly assemblyObj)
 {
 	int index = hashFunc(assemblyObj.getName());
 	table[index].append(assemblyObj);
 }
 
+/*
+Remove function to remove inputted assembly objects from hash table
+Pre - assembly object
+Post - assembly object removed from hash table
+Returns - N/A
+*/
 void HashTable::remove(Assembly assemblyObj)
 {
 	int index = hashFunc(assemblyObj.getName());
 	table[index].remove(assemblyObj);
-
-
 }
 
-
+/*
+Prints all assembly objects's properties currently in hash table
+Pre - N/A
+Post - prints table's assembly objects
+Returns - N/A
+*/
 void HashTable::printTable()
 {
 	for (int i = 0; i < tableSize; i++) {
@@ -51,6 +83,12 @@ void HashTable::printTable()
 	}
 }
 
+/*
+Removes all the assembly objects in the table
+Pre - N/A
+Post - Table is cleared of assembly objects
+Returns - N/A
+*/
 void HashTable::clear()
 {
 	for (int i = 0; i < tableSize; i++) {
@@ -58,23 +96,36 @@ void HashTable::clear()
 	}
 }
 
+/*
+Prints individual given assembly object properties
+Pre - assembly object
+Post - prints given assembly object properties
+Returns - N/A
+*/
 void HashTable::printObj(Assembly assemblyObj)
 {
 	int index = hashFunc(assemblyObj.getName());
 	table[index].print();
 }
 
+/*
+Function to check if given assembly object exists. 
+Pre - key string
+Post - print object's properties if object exist
+Returns - true if item exists, false if item doesn't exist
+*/
 bool HashTable::search(Assembly assemblyObj)
 {
-	bool retVal = false;
 	int index = hashFunc(assemblyObj.getName());
 	if (table[index].find(assemblyObj)) {
-		retVal = true;
+		cout << "Item exist!" << endl;
+		printObj(assemblyObj);
+		return true;;
 	}
 	else {
 		cout << "Item does not exist!" << endl;
+		return false;
 	}
-	return retVal;
 }
 
 Assembly HashTable::getObject(Assembly assemblyObj)
@@ -85,13 +136,75 @@ Assembly HashTable::getObject(Assembly assemblyObj)
 	return tempItem;
 }
 
-void HashTable::getLength()
+/*
+Getter for number of assembly objects in the hash table
+Pre - N/A
+Post - returns number of assembly objects count in the table
+Returns - number of assembly objects currently in the hash table
+*/
+int HashTable::getnumberOfItems()
 {
-	int length = 0;
+	int amount = 0;
 	for (int i = 0; i < tableSize; i++) {
-		length += table[i].length();
+		amount += table[i].length();
 	}
-	cout << length << endl;
+	numberOfItems = amount;
+	return amount;
+}
+
+/*
+Getter for load factor of the hash table
+Pre - N/A
+Post - returns load factor
+Returns - load factor value
+*/
+int HashTable::getLoadFactor()
+{
+	int filled = 0;
+	for (int i = 0; i < tableSize; i++) {
+		if (table[i].isEmpty() == false) {
+			filled++;
+		}
+	}
+	loadFactor = ((double)filled / tableSize) * 100;
+	return loadFactor;
+
+}
+
+/*
+Getter for amount of collisions that exist in the hash table
+Pre - N/A
+Post - returns number of collisions in hash table
+Returns - amount of collisions
+*/
+int HashTable::getCollisionsCount()
+{
+	int amount = 0;
+	for (int i = 0; i < tableSize; i++) {
+		if (table[i].length() >= 2) {
+			amount++;
+		}
+	}
+	collisions = amount;
+	return amount;
+}
+
+/*
+Function to print hash table statistics to fulfill menu item 7
+Pre - N/A
+Post - prints hash table statistics
+Returns - N/A
+*/
+void HashTable::printStats()
+{
+	cout << "Here are the statistics of the hash table:" << endl;
+	cout << "Table size: " << tableSize << endl;
+	cout << "Number of items in table: " << getnumberOfItems() << endl;
+	cout << fixed;
+	cout << setprecision(2);
+	cout << "Load Factor: " << getLoadFactor() << "%" << endl;
+
+	cout << "Number of collisions: " << getCollisionsCount() << endl;
 }
 
 
