@@ -220,10 +220,14 @@ int main()
 	int choice = 0;
 	bool loop = true;
 
+	// line by line processing variable...
 	std::string csvLine{ "" };
+	// existing CSV header...
+	std::string csvFileHeader{ "" };
 	int         number_of_lines{ 0 };
 	int         count{ 0 };
 
+	// default CSV file name
 	ifstream inFile("faux_assemblies.csv");
 	SkipBOM(inFile);
 
@@ -239,9 +243,10 @@ int main()
 
 		SkipBOM(inFile);
 		while (!inFile.eof() && count < number_of_lines) {
-			// skip the csv header
+			// skip the csv header in processing...
 			if (count == 0) {
-				getline(inFile, csvLine);
+				// ...but save it off for reuse when saving...
+				getline(inFile, csvFileHeader);
 				count++;
 			}
 
@@ -539,8 +544,28 @@ int main()
 	// size variable is same for both arrays because of parallel arrays.
 	int assemblyCount = assemblyByName.GetLength();
 
+	// SAVE THE OUTPUT FILE...
+	// default CSV file name
+	ofstream outFile("faux_assemblies.csv");
+	// 
+	for (int index = 0; index < assemblyCount; ++index) {
+		// Get the 7-tuple of GNome assembly data as typed values...
+		std::string rGNAName           = assemblyByName[index]->getName();
+		std::string rGNAType           = assemblyByName[index]->getType();
+		int         rGNANumContigs     = assemblyByName[index]->getNumContigs();
+		int         rGNASize           = assemblyByName[index]->getNumContigs();
+		int         rGNANumN50         = assemblyByName[index]->getN50();
+		double      rGNAGCContent      = assemblyByName[index]->getGc();
+		double      rGNAPercentUnknown = assemblyByName[index]->getGc();
+
+		outFile << rGNAName << ',' << rGNAType << ',' << rGNANumContigs << ',' << rGNASize << ',' <<
+			rGNANumN50 << ',' << rGNAGCContent << ',' << rGNAPercentUnknown << endl;
+	}
+	// done lets close the file
+	outFile.close();
+
 	// Clean up allocated memory for Assembly Objects.
-	for (int index = 0; index < objectCount; ++index) {
+	for (int index = 0; index < assemblyCount; ++index) {
 		delete assemblyByName[index];
 	}
 
