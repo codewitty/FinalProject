@@ -18,59 +18,6 @@
 
 using namespace std;
 
-void SkipBOM(std::ifstream &in)
-{
-	char test[3] = { 0 };
-	in.read(test, 3);
-	if ((unsigned char)test[0] == 0xEF &&
-		(unsigned char)test[1] == 0xBB &&
-		(unsigned char)test[2] == 0xBF)
-	{
-		return;
-	}
-	in.seekg(0);
-}
-
-// pre     : a string that has spaces in from of or after it.  
-//           EX: "hello " -OR- " hello" -OR- " hello "...
-// post    : Our array has a string based CSV row that can now be converted
-//           to assemblies.
-// returns : By reference our row array is updated.
-string celltrim(const string& str)
-{
-	size_t first = str.find_first_not_of(' ');
-	if (string::npos == first)
-	{
-		return str;
-	}
-	size_t last = str.find_last_not_of(' ');
-	return str.substr(first, (last - first + 1));
-}
-
-// pre     : validated 7 item string list with 6 comma (',') delimiters
-//           EX: "contig-20.fa,pilon+idba,2637,2182179,306,0.1573,0.1964"
-// post    : Our array has a string based CSV row that can now be converted
-//           to assemblies.
-// returns : By reference our row array is updated.
-void rowsplit(const std::string& str, Array<string>& row, char delim = ',')
-{
-	// string indexes for .find
-	std::size_t prev{ 0 };
-	std::size_t curr{ str.find(delim) };
-
-	// our value index
-	int ndx{ 0 };
-	// while not end of string
-	while (curr != std::string::npos) {
-		std::string tcell = celltrim(str.substr(prev, curr - prev));
-		row[ndx] = tcell;
-		prev = curr + 1;
-		curr = str.find(delim, prev);
-		ndx++;
-	}
-	row[ndx] = celltrim(str.substr(prev, curr - prev));
-}
-
 // Forward Declarations
 //void displayAssemblyName(Assembly & anItem);
 //void displayAssemblyBday(Assembly & anItem);
@@ -78,8 +25,6 @@ template<class T> void printOrders(CTree<T>* pTree);
 void displayPretty(Assembly & anItem);
 void displayAssembly(Assembly & anItem);
 int objectCount = 0;
-
-
 
 
 //****************************************************************************
