@@ -79,7 +79,6 @@ void displayAssembly(Assembly & anItem);
 int objectCount = 0;
 
 BNTree<Assembly> assemblyTree;
-//BNTree<Assembly> assemblyTreeName;
 LinkedList<Assembly> assemblyList(DESCENDING);
 CTree<Assembly> assemblyCTree;
 HashTable table;
@@ -93,14 +92,12 @@ bool addItem(Assembly * anItem){
 	table.add(*anItem);
 
 	// TREE ADD CODE
-//	assemblyTreeName.add(*anItem);
 	anItem->setOrdering(assemblyAttribute::SIZE);
 	assemblyTree.add(*anItem);
+
 	// 2-3 tree...
 	anItem->setOrdering(assemblyAttribute::NUM_CONTIGS);
 	assemblyCTree.insert(anItem);
-
-
 	
 	// LINKED LIST ADD CODE
 	anItem->setOrdering(assemblyAttribute::N50);
