@@ -225,7 +225,7 @@ int main()
 	// existing CSV header...
 	std::string csvFileHeader{ "" };
 	int         number_of_lines{ 0 };
-	int         count{ 0 };
+	int         objectCount{ 0 };
 
 	// default CSV file name
 	ifstream inFile("faux_assemblies.csv");
@@ -242,12 +242,12 @@ int main()
 		inFile.seekg(0, ios::beg);
 
 		SkipBOM(inFile);
-		while (!inFile.eof() && count < number_of_lines) {
+		while (!inFile.eof() && objectCount < number_of_lines) {
 			// skip the csv header in processing...
-			if (count == 0) {
+			if (objectCount == 0) {
 				// ...but save it off for reuse when saving...
 				getline(inFile, csvFileHeader);
-				count++;
+				objectCount++;
 			}
 
 			const int GNomeCSVCols = 7;     // Maximum data fields in our database
@@ -267,12 +267,12 @@ int main()
 			double aSIZEContent(stod(aRow[SIZE_CONTENT]));
 			double aPercentUnknown(stod(aRow[PERCENT_UNKNOWN]));
 
-			assemblyByName[count]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aSIZEContent, aPercentUnknown, assemblyAttribute::NAME);
+			assemblyByName[objectCount]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aSIZEContent, aPercentUnknown, assemblyAttribute::NAME);
 
 			//// Add to Linked List, Hash Table and BST
-			addItem(assemblyByName[count]);
+			addItem(assemblyByName[objectCount]);
 
-			count++;
+			objectCount++;
 		}
 		inFile.close();
 	}
@@ -351,11 +351,11 @@ int main()
 				cin >> SIZEContent;
 				cout << "Enter the percent unknown for the new Genome. " << endl;
 				cin >> PercentUnknown;
-				assemblyByName[count]    = new Assembly(Name, Method, NumContigs, SizeBases, N50kbp, SIZEContent, PercentUnknown, assemblyAttribute::NAME);
+				assemblyByName[objectCount]    = new Assembly(Name, Method, NumContigs, SizeBases, N50kbp, SIZEContent, PercentUnknown, assemblyAttribute::NAME);
 				//// Add to Linked List, Hash Table and BST
-				addItem(assemblyByName[count]);
+				addItem(assemblyByName[objectCount]);
 
-				count++;
+				objectCount++;
 
 				/*
 					 < " A genome assembly consists of the following data items "
@@ -379,7 +379,7 @@ int main()
 				// save for later deallocation
 				aAssemblyByName[objectCount] = personByName;
 				aAssemblyByBday[objectCount] = personByBday; 
-				// inc object count...
+				// inc object objectCount...
 				objectCount += 1;
 
 				*/
@@ -523,14 +523,6 @@ int main()
 		//************************************************************//
 		case 9:
 		{
-			int count = 0;
-			ofstream outFile;
-			outFile.open("Outfile.csv");
-			string aname = "wol_proteins.fasta.gz";
-			//Assembly searchGenome(aname, "", 0, 0, 0, 0.0, 0.0, NAME);
-			//Assembly foundGenome = assemblyTreeName.find(searchGenome);
-			//outFile << foundGenome << endl;
-
 			cout << endl << "~~~~~~~~~~~~EXITING PROGRAM~~~~~~~~~~~~~~~~" << endl << endl << endl;
 			loop = false;
 			break;
@@ -541,14 +533,12 @@ int main()
 		} // End Switch for Menu
 	} // End While loop for Menu
 
-	// size variable is same for both arrays because of parallel arrays.
-	int assemblyCount = assemblyByName.GetLength();
-
+/*
 	// SAVE THE OUTPUT FILE...
 	// default CSV file name
 	ofstream outFile("faux_assemblies.csv");
 	// 
-	for (int index = 0; index < assemblyCount; ++index) {
+	for (int index = 0; index < objectCount; ++index) {
 		// Get the 7-tuple of GNome assembly data as typed values...
 		std::string rGNAName           = assemblyByName[index]->getName();
 		std::string rGNAType           = assemblyByName[index]->getType();
@@ -563,9 +553,10 @@ int main()
 	}
 	// done lets close the file
 	outFile.close();
+	*/
 
 	// Clean up allocated memory for Assembly Objects.
-	for (int index = 0; index < assemblyCount; ++index) {
+	for (int index = 0; index < objectCount; ++index) {
 		delete assemblyByName[index];
 	}
 
