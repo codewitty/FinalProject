@@ -487,7 +487,9 @@ int main()
 		//************************************************************//
 		case 7:
 		{
+
 			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			table.printStats();
 			break;
 		}
 
