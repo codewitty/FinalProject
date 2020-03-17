@@ -97,6 +97,20 @@ void HashTable::clear()
 }
 
 /*
+Finds individual given assembly object properties
+Pre - assembly object
+Post - N/A 
+Return - Returns found assembly object 
+*/
+Assembly HashTable::getObject(Assembly assemblyObj)
+{
+	Assembly tempItem;
+	int index = hashFunc(assemblyObj.getName());
+	tempItem = table[index].findItem(assemblyObj);
+	return tempItem;
+}
+
+/*
 Prints individual given assembly object properties
 Pre - assembly object
 Post - prints given assembly object properties
@@ -104,8 +118,8 @@ Returns - N/A
 */
 void HashTable::printObj(Assembly assemblyObj)
 {
-	int index = hashFunc(assemblyObj.getName());
-	table[index].print();
+	Assembly temp = getObject(assemblyObj);
+	cout << temp;
 }
 
 /*
@@ -118,23 +132,13 @@ bool HashTable::search(Assembly assemblyObj)
 {
 	int index = hashFunc(assemblyObj.getName());
 	if (table[index].find(assemblyObj)) {
-		cout << "Item exist!" << endl;
-		printObj(assemblyObj);
 		return true;;
 	}
 	else {
-		cout << "Item does not exist!" << endl;
 		return false;
 	}
 }
 
-Assembly HashTable::getObject(Assembly assemblyObj)
-{
-	Assembly tempItem;
-	int index = hashFunc(assemblyObj.getName());
-	tempItem = table[index].findItem(assemblyObj);
-	return tempItem;
-}
 
 /*
 Getter for number of assembly objects in the hash table

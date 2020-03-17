@@ -11,6 +11,7 @@
 using namespace std;
 
 // Forward Declarations
+int ValidateTempInput(int tempInt);
 void DeleteEmptyLines(string &Path);
 string trim(string s);
 string ltrim(string s);
@@ -19,6 +20,15 @@ const string WHITESPACE = " \n\r\t\f\v";
 const int ARRAY_SIZE{ 20 };
 bool exitFunction(int);
 
+int ValidateTempInput(int tempInt) {
+	while (cin.fail() || (tempInt < 0 && tempInt > 2147483647)) {
+		cin.clear();
+		cin.ignore(32767, '\n');
+		cout << "Please enter a valid value between 0 to 2147483647" << endl;
+		cin >> tempInt;
+	}
+	return tempInt;
+}
 
 void DeleteEmptyLines(string &Path)
 {

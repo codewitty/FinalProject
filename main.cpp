@@ -116,7 +116,7 @@ bool searchItem(Assembly searchGenome) {
 		cout << string(138, '=');
 		cout << "\nData item found in the Hash Table  : ";
 		table.printObj(foundGenome);
-		cout << "Data item found in the BST         : ";
+		cout << "\nData item found in the BST         : ";
 		// Change key for BST
 		foundGenome.setOrdering(assemblyAttribute::SIZE);
 		Assembly treeGenome = assemblyTree.find(foundGenome);
@@ -134,13 +134,15 @@ bool searchItem(Assembly searchGenome) {
 		cout << string(138, '=') << endl;
 		retVal = true;
 	}
+	else
+		cout << "!!!!!! ASSEMBLY GENOME NOT FOUND !!!!!!!";
 	return retVal;
 }
 
 bool deleteItem(Assembly genome_to_delete){
 	bool retVal{false};
 	if (!table.search(genome_to_delete)) {
-		cout << "\n Data item not found" << endl;
+		cout << "\n!!!!!! ASSEMBLY GENOME NOT FOUND !!!!!!!";
 		retVal = false;
 	}
 	else {
@@ -153,7 +155,7 @@ bool deleteItem(Assembly genome_to_delete){
 		table.remove(deleteGenome);
 		// Remove from BST
 		deleteGenome.setOrdering(assemblyAttribute::SIZE);
-		cout << "Data item removed from the BST        : ";
+		cout << "\nData item removed from the BST        : ";
 		Assembly dTreeGenome = assemblyTree.find(deleteGenome);
 		cout << dTreeGenome;
 		assemblyTree.remove(deleteGenome);
@@ -317,9 +319,11 @@ int main()
 			string new_method;
 			string Name;
 			string Method;
+			int tempInt;
 			int    NumContigs;
 			int    SizeBases;
 			int    N50kbp;
+			double tempDouble;
 			double SIZEContent;
 			double PercentUnknown;
 			while (flag) {
@@ -330,11 +334,14 @@ int main()
 				getline(cin, new_method);
 				Method = trim(new_method);
 				cout << "Enter the number of contigs for the new Genome. " << endl;
-				cin >> NumContigs;
+				cin >> tempInt;
+				NumContigs = ValidateTempInput(tempInt);
 				cout << "Enter the size of bases for the new Genome. " << endl;
-				cin >> SizeBases;
+				cin >> tempInt;
+				SizeBases = ValidateTempInput(tempInt);
 				cout << "Enter the N50 for the new Genome. " << endl;
-				cin >> N50kbp;
+				cin >> tempInt;
+				N50kbp = ValidateTempInput(tempInt);
 				cout << "Enter the SIZE Content for the new Genome. " << endl;
 				cin >> SIZEContent;
 				cout << "Enter the percent unknown for the new Genome. " << endl;
@@ -475,7 +482,7 @@ int main()
 		{
 			//printOrders(&assemblyCTree);
 			cout << string(110, '=');
-			cout << endl << endl << "~~~~~~~~~~~~PRINTING INDENTED BST~~~~~~~~~~~~~" << endl;
+			cout << endl << "~~~~~~~~~~~~PRINTING INDENTED BST~~~~~~~~~~~~~" << endl;
 			cout << string(110, '=') << endl;
 			assemblyTree.prettyPrint(displayPretty);
 			cout << endl << string(110, '=') << endl;
@@ -487,9 +494,11 @@ int main()
 		//************************************************************//
 		case 7:
 		{
-
-			cout << endl << endl << "~~~~~~~~~~~~EFFICIENCY~~~~~~~~~~~~~" << endl;
+			cout << string(110, '=') << endl;
+			cout << string(20, '~') << "EFFICIENCY" << string(20,'~') << endl;
+			cout << string(110, '=') << endl;
 			table.printStats();
+			cout << string(110, '=') << endl;
 			break;
 		}
 
