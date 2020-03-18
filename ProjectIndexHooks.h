@@ -18,10 +18,18 @@
 
 
 // Our 4 indexes
-BNTree<Assembly> assemblyTree;                  // Our binary search tree template.
-LinkedList<Assembly> assemblyList(DESCENDING);  // Our Linked List template.
-CTree<Assembly> assemblyCTree;                  // Our 2-3 Tree open source template.
+BNTree<Assembly> assemblyTree;                  // Our binary search tree.
+LinkedList<Assembly> assemblyList(DESCENDING);  // Our Linked List.
+CTree<Assembly> assemblyCTree;                  // Our 2-3 Tree.
 HashTable table;                                // Our hash table.
+
+// We use this to print records in name.
+BNTree<Assembly> BST_NameOrder;                 
+
+
+// THis is for keeping track dynamically allocated Assemblies.
+const int       MAX_ASSEMBLIES = 500;              // Maximum persons in our database
+Array<Assembly *> assemblyByName(MAX_ASSEMBLIES);  // An array of type 'Assembly' using Array Template
 
 // Covering function for generic add.
 bool addItem(Assembly * anItem) {
@@ -42,8 +50,10 @@ bool addItem(Assembly * anItem) {
 	// LINKED LIST ADD CODE
 	anItem->setOrdering(assemblyAttribute::N50);
 	assemblyList.insert(*anItem);
-	// 3. Report results
+
+	// Extra by name BST index.  Used save file in name order.
 	anItem->setOrdering(assemblyAttribute::NAME);
+	BST_NameOrder.add(*anItem);
 
 	return true;
 }
@@ -85,31 +95,43 @@ bool deleteItem(Assembly genome_to_delete) {
 		retVal = false;
 	}
 	else {
-		// ==> foundAssemblyRecord found by name, get the record.
-		Assembly deleteGenome = table.getObject(genome_to_delete);
-		// Remove from Hash Table
-		cout << string(141, '=');
+
+		// 1.  Remove from Hash Table (keyed by NAME).
+		Assembly deleteGenome = table.getObject(genome_to_delete);  // ...get the record...
+
+		cout << string(141, '=');                                   // Some hashtable output formatting (??)
 		cout << "\nData item removed from the Hash Table : ";
 		table.printObj(deleteGenome);
-		table.remove(deleteGenome);
-		// Remove from BST
-		deleteGenome.setOrdering(assemblyAttribute::SIZE);
+		table.remove(deleteGenome);                                 // ...remove the item from the hash table.
+
+		// 2.  Remove from BST (oredered by SIZE).
+		deleteGenome.setOrdering(assemblyAttribute::SIZE);          // ...Set the ordering attruibute to 'SIZE'.
 		cout << "\nData item removed from the BST        : ";
 		Assembly dTreeGenome = assemblyTree.find(deleteGenome);
 		cout << dTreeGenome;
-		assemblyTree.remove(deleteGenome);
-		// Remove from 2-3 Tree 
-		deleteGenome.setOrdering(assemblyAttribute::NUM_CONTIGS);
+		assemblyTree.remove(deleteGenome);                          // ...remove the item from the binary search tree.
+
+		// 3.  Remove from 2-3 Tree (ordered by number of contigs (NUM_CONTIGS))
+		deleteGenome.setOrdering(assemblyAttribute::NUM_CONTIGS);   // ...Set the ordering attruibute to 'NUM_CONTIGS'.
 		cout << "\nData item removed from the 2-3 Tree   : ";
 		const Assembly * dcTreeGenome = assemblyCTree.find(&deleteGenome);
 		cout << *dcTreeGenome;
-		assemblyCTree.deleteItem(&deleteGenome);
+		assemblyCTree.deleteItem(&deleteGenome);                    // ...remove the item from the 2-3 tree.
+
+		// 4.  Remove from the Linked List (ordered by N50).
 		cout << "\nData item removed from the Linked List: ";
-		deleteGenome.setOrdering(assemblyAttribute::N50);
+		deleteGenome.setOrdering(assemblyAttribute::N50);           // ...Set the ordering attruibute to 'N50'.
 		Assembly listDeleteGenome = assemblyList.findItem(deleteGenome);
 		cout << listDeleteGenome;
 		assemblyList.remove(listDeleteGenome);
 		cout << endl << string(141, '=') << endl;
+
+		// 5.  Remove from name ordering BST (our utility BST index for convenient
+		// NAME ordering access.)  Used for writing out the file.
+		deleteGenome.setOrdering(assemblyAttribute::NAME);          // Set the ordering attruibute to 'NAME'.
+		Assembly BSTreeNameOrderGenome = BST_NameOrder.find(deleteGenome); // First find the item....
+		BST_NameOrder.remove(BSTreeNameOrderGenome);                // ...remove the item from the secondary BSTree.
+
 		retVal = true;
 	}
 	// 3. Report results

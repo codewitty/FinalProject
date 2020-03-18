@@ -24,6 +24,11 @@ using namespace std;
 template<class T> void printOrders(CTree<T>* pTree);
 void displayPretty(Assembly & anItem);
 void displayAssembly(Assembly & anItem);
+void csvRowOutput(Assembly & anItem);
+
+// our global file handles
+ofstream csvSaveFh;  // file handle for the name ordered traversals.
+
 int objectCount = 0;
 
 
@@ -55,9 +60,6 @@ int main()
 	const int N50_kbp{ 4 };
 	const int SIZE_CONTENT{ 5 };
 	const int PERCENT_UNKNOWN{ 6 };
-
-	const int       MAX_ASSEMBLIES = 500;              // Maximum persons in our database
-	Array<Assembly *> assemblyByName(MAX_ASSEMBLIES);		// An array of type 'Assembly' using Array Template
 
 	//   Print Header
 	cout << "\n\nFinal Project\n"
@@ -96,6 +98,10 @@ int main()
 			if (objectCount == 0) {
 				// ...but save it off for reuse when saving...
 				getline(inFile, csvFileHeader);
+				// Add  an empty record to make up for the CSV header...
+				Assembly *newAssemblyPtr = new Assembly();
+				assemblyByName[objectCount] = newAssemblyPtr;
+
 				objectCount++;
 			}
 
@@ -116,10 +122,11 @@ int main()
 			double aSIZEContent(stod(aRow[SIZE_CONTENT]));
 			double aPercentUnknown(stod(aRow[PERCENT_UNKNOWN]));
 
-			assemblyByName[objectCount]    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aSIZEContent, aPercentUnknown, assemblyAttribute::NAME);
+			Assembly *newAssemblyPtr    = new Assembly(aName, aMethod, aNumContigs, aSizeBases, aN50kbp, aSIZEContent, aPercentUnknown, assemblyAttribute::NAME);
+ 			assemblyByName[objectCount] = newAssemblyPtr;
 
 			//// Add to Linked List, Hash Table and BST
-			addItem(assemblyByName[objectCount]);
+			addItem(newAssemblyPtr);
 
 			objectCount++;
 		}
@@ -128,6 +135,7 @@ int main()
 	else {
 		cout << "   Error!!!" << endl;
 	}
+
 
 
 	//**********************************************************************//
@@ -381,30 +389,21 @@ int main()
 		} // End Switch for Menu
 	} // End While loop for Menu
 
-/*
 	// SAVE THE OUTPUT FILE...
-	// default CSV file name
-	ofstream outFile("faux_assemblies.csv");
-	// 
-	for (int index = 0; index < objectCount; ++index) {
-		// Get the 7-tuple of GNome assembly data as typed values...
-		std::string rGNAName           = assemblyByName[index]->getName();
-		std::string rGNAType           = assemblyByName[index]->getType();
-		int         rGNANumContigs     = assemblyByName[index]->getNumContigs();
-		int         rGNASize           = assemblyByName[index]->getNumContigs();
-		int         rGNANumN50         = assemblyByName[index]->getN50();
-		double      rGNAGCContent      = assemblyByName[index]->getGc();
-		double      rGNAPercentUnknown = assemblyByName[index]->getGc();
+	// Open the default CSV file name.
+	csvSaveFh.open("faux_assemblies.csv");
+	// prepend the CSV header row...
+	csvSaveFh << csvFileHeader << endl;
 
-		outFile << rGNAName << ',' << rGNAType << ',' << rGNANumContigs << ',' << rGNASize << ',' <<
-			rGNANumN50 << ',' << rGNAGCContent << ',' << rGNAPercentUnknown << endl;
-	}
+	// Add all records to the CSV
+	BST_NameOrder.inorderTraverse(csvRowOutput);
+
 	// done lets close the file
-	outFile.close();
-	*/
+	csvSaveFh.close();
 
 	// Clean up allocated memory for Assembly Objects.
-	for (int index = 0; index < objectCount; ++index) {
+	// index is valid @ 1 not 0
+	for (int index = 1; index < objectCount; ++index) {
 		delete assemblyByName[index];
 	}
 
@@ -427,5 +426,21 @@ void printOrders(CTree<T>* pTree)
 	pTree->print(inorder, &iItemCnt);
 	std::cout << "**inorder[" << iItemCnt << "]" << std::endl << std::endl;
 }
+
+void csvRowOutput(Assembly & anItem) {
+
+	// Get the 7-tuple of GNome assembly data as typed values...
+	std::string rGNAName           = anItem.getName();
+	std::string rGNAType           = anItem.getType();
+	int         rGNANumContigs     = anItem.getNumContigs();
+	int         rGNASize           = anItem.getSize();
+	int         rGNANumN50         = anItem.getN50();
+	double      rGNAGCContent      = anItem.getGc();
+	double      rGNAPercentUnknown = anItem.getUnknown();
+
+	csvSaveFh << rGNAName << ',' << rGNAType << ',' << rGNANumContigs << ',' << rGNASize << ',' <<
+		rGNANumN50 << ',' << rGNAGCContent << ',' << rGNAPercentUnknown << endl;
+}
+
 
 // EOF Lab05BST_main.cpp
