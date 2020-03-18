@@ -8,7 +8,6 @@ using namespace std;
 
 HashTable::HashTable()
 {
-	// WHAT TO PUT HERE
 }
 
 /*
@@ -162,7 +161,7 @@ Pre - N/A
 Post - returns load factor
 Returns - load factor value
 */
-int HashTable::getLoadFactor()
+double HashTable::getLoadFactor()
 {
 	int filled = 0;
 	for (int i = 0; i < tableSize; i++) {

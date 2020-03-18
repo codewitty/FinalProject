@@ -50,7 +50,7 @@ public:
 	
 	// getters for table stats
 	int getnumberOfItems();
-	int getLoadFactor();
+	double getLoadFactor();
 	int getCollisionsCount();
 
 	// function to print table statistics for option 7(efficiency)

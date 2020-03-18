@@ -33,8 +33,10 @@ int objectCount = 0;
 
 
 //****************************************************************************
-// int main() - Main is our menu driven system for BST Tree based Assembly DB.
-//				Our DB has a record type that allows you to sort record types
+// int main() - Main is our menu driven system for a multi-data structure
+//				based Genome Assembly DB.
+//				Our DB has a record type that allows you to sort different
+//				Genome Assemblies based on their characteristics
 //				based on a persons name or birthday.
 //				
 // You can add, delete or find persons. You can also print the DB using tree
@@ -49,6 +51,7 @@ int objectCount = 0;
 //	  ask if done
 //	  	  exit
 //	  else continue
+//	  write updated data to file.
 //	  
 //***************************************************************************
 int main()
@@ -213,32 +216,6 @@ int main()
 
 				objectCount++;
 
-				/*
-					 < " A genome assembly consists of the following data items "
-					 << " A name, a type, the number of contigs( whole number only), 
-					 << " size( whole number only), N50 (whole number only), "
-					 << " gc, number of unknown). "
-					 << "\n  Please enter all data in one line separated by spaces."
-					 << endl;
-				Assembly * temp1 = &AssemblyByName01;
-				Assembly * temp2 = &AssemblyByName02;
-				Assembly * temp3 = &AssemblyByName03;
-				addItem(temp1);
-				addItem(temp2);
-				addItem(temp3);
-				
-				// dynamicallyy allocate & assign to array to keep track of memory
-				Assembly * personByName = new Assembly(tname, tbday, NAME); 
-				Assembly * personByBday = new Assembly(tname, tbday, BDAY); 
-				// Add to all data structures, BST, Hash Table, Linked List.
-				addItem(personByName, personByBday);
-				// save for later deallocation
-				aAssemblyByName[objectCount] = personByName;
-				aAssemblyByBday[objectCount] = personByBday; 
-				// inc object objectCount...
-				objectCount += 1;
-
-				*/
 				// Set flag using exit function
 				int num = 1;
 				flag = exitFunction(num);
@@ -364,13 +341,17 @@ int main()
 		}
 
 		//************************************************************//
-		// case 8 PRINTS all node from both existing trees.			  //
-		// Name Tree is printed in Preorder and Postorder modes.	  //
-		// Birthday Tree is printed in Inorder and BreadthFirst mode. //
+		// case 8 PRINTS all data from the 2-3 Tree by Num_Contigs			// 
 		//************************************************************//
 		case 8:
 		{
-			cout << endl << endl << "~~~~~~~~~~~~Special Menu Option~~~~~~~~~~~~~" << endl;
+			cout << endl << string(39, '~') << "PRINTING 2-3 Tree BY NUM_CONTIGS" << string(39, '~') << endl;
+			cout << string(110, '=') << endl;
+			cout << setw(30) << left << "GENOME NAME" << setw(20) << "GENOME TYPE" << setw(15) << "NUM_CONTIGS" 
+				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
+			cout << string(110, '=') << endl;
+			int num = 0;
+			assemblyCTree.print(inorder, &num);
 			break;
 		}
 
