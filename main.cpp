@@ -173,7 +173,7 @@ int main()
 		switch (choice)
 		{
 			//************************************************************//
-			// case 1 ADDS a node to both existing trees.				  //
+			// case 1 ADDS a node to all data structures 
 			//************************************************************//
 		case 1: // Add a Node to both Trees 
 		{
@@ -245,7 +245,7 @@ int main()
 		} // End switch
 
 		//************************************************************//
-		// case 3 SEARCHES for a user specified node.				  //
+		// case 3 SEARCHES for a user specified Genome Assembly
 		//************************************************************//
 		case 3: // Search for a particular Genome by Name 
 		{
@@ -389,11 +389,13 @@ int main()
 	return 0;
 }
 
+// Helper function to print data structures
 void displayAssembly(Assembly & anItem)
 {
 	cout << anItem << endl;
 }
 
+// Helper function to print indented tree 
 void displayPretty(Assembly & anItem) {
 	anItem.printItemKey();
 }
@@ -406,6 +408,7 @@ void printOrders(CTree<T>* pTree)
 	std::cout << "**inorder[" << iItemCnt << "]" << std::endl << std::endl;
 }
 
+// Helper function to process input file and populate data structures
 void csvRowOutput(Assembly & anItem) {
 
 	// Get the 7-tuple of GNome assembly data as typed values...
@@ -422,4 +425,4 @@ void csvRowOutput(Assembly & anItem) {
 }
 
 
-// EOF Lab05BST_main.cpp
+// EOF main.cpp
