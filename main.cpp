@@ -19,8 +19,6 @@
 using namespace std;
 
 // Forward Declarations
-//void displayAssemblyName(Assembly & anItem);
-//void displayAssemblyBday(Assembly & anItem);
 template<class T> void printOrders(CTree<T>* pTree);
 void displayPretty(Assembly & anItem);
 void displayAssembly(Assembly & anItem);
