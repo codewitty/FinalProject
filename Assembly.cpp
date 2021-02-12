@@ -350,6 +350,7 @@ void Assembly::printItemKey()
 std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 {
 	// output the NAME
+/*
 #ifndef NOWINHEAD
 	// windows screen handle used to map stdio...
 	HANDLE screen = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -396,6 +397,7 @@ std::ostream & operator<<(std::ostream & strm, Assembly & obj)
 	}
 	else
 #endif
+*/
 	strm << setw(10) << obj.n50;   //
 
 

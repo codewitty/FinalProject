@@ -147,7 +147,8 @@ int main()
 	while (loop)
 	{
 		// Output User Menu
-		cout << endl
+		cout << endl;
+		cout << string(110, '=') << endl
 			 << "   What operation would you like to carry out?" << endl;
 		cout << "   1: Add a Genome Assembly" << endl;
 		cout << "   2: Delete a Genome Assembly" << endl;
@@ -308,6 +309,7 @@ int main()
 				<< setw(10) << "Size" << setw(10) << "n50" << setw(10) << "GC Count" << setw(10) << "Percent UNKNOWN" << endl;
 			cout << string(110, '=') << endl;
 			assemblyList.print();
+			cout << endl << string(39, '~') << "PRINTING COMPLETE" << string(39, '~') << endl;
 		break;
 		}
 
@@ -322,6 +324,7 @@ int main()
 			cout << string(110, '=') << endl;
 			assemblyTree.prettyPrint(displayPretty);
 			cout << endl << string(110, '=') << endl;
+			cout << endl << string(39, '~') << "PRINTING COMPLETE" << string(39, '~') << endl;
 			break;
 		}
 
@@ -350,6 +353,7 @@ int main()
 			cout << string(110, '=') << endl;
 			int num = 0;
 			assemblyCTree.print(inorder, &num);
+			cout << endl << string(39, '~') << "PRINTING COMPLETE" << string(39, '~') << endl;
 			break;
 		}
 

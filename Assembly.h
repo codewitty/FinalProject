@@ -1,10 +1,9 @@
 #pragma once
 #include <iostream>
 #include <string>
+//#include <Windows.h>
 using namespace std;
-
 #ifndef NOWINHEAD
-#include <Windows.h>
 
 // windows colors
 // Windows specific console color pallet.
